@@ -16,7 +16,6 @@ const SignInScreen = (props) => {
           style={styles.input}
           value={""}
           keyboardType="email-address"
-          /* ref={mobileTextInput} */
           onChangeText={(text) => {
 
           }}
@@ -31,7 +30,6 @@ const SignInScreen = (props) => {
           style={styles.input}
           value={""}
           keyboardType="default"
-          /* ref={mobileTextInput} */
           onChangeText={(text) => {
 
           }}
