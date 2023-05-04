@@ -22,22 +22,22 @@ export default StyleSheet.create({
         color: GOBALCOLORS.COLORS.WHITE
     },
     inputContainer: {
-        borderRadius: 10,
+        borderRadius: 7,
         borderColor: GOBALCOLORS.COLORS.BLUE,
         borderWidth: 1,
-        height: 61,
+        height: 60,
         width: width / 1.1,
         overflow: 'hidden',
         borderWidth: 0,
-        marginTop: 10,
+        marginTop: 0,
     },
     input: {
         borderRadius: 0,
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
-        height: 61,
-        overflow: 'hidden',
-        backgroundColor: '#fff',
+        height: 55,
+        //overflow: 'hidden',
+        backgroundColor: GOBALCOLORS.COLORS.BROWN_LIGHT,
     },
     buttonStyle: {
         backgroundColor: GOBALCOLORS.COLORS.GREEN_2,

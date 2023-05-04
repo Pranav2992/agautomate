@@ -8,7 +8,7 @@ import SignUpViewController from "../../view-controllers/signupviewcontroller";
 
 const SignUpScreen = (props) => {
 
-  const { registerUser } = SignUpViewController();
+  const { registerUser, setShowPassword, showPassword } = SignUpViewController();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -35,8 +35,8 @@ const SignUpScreen = (props) => {
             onChangeText={(text) => {
               setFirstName(text);
             }}
-            activeUnderlineColor={GOBALCOLOR.COLORS.ORANAGE}
-            underlineColor={GOBALCOLOR.COLORS.ORANAGE}
+            activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+            underlineColor={GOBALCOLOR.COLORS.BROWN}
           />
         </View>
         <View style={[styles.inputContainer, { marginTop: 10 }]}>
@@ -49,8 +49,8 @@ const SignUpScreen = (props) => {
             onChangeText={(text) => {
               setLastName(text);
             }}
-            activeUnderlineColor={GOBALCOLOR.COLORS.ORANAGE}
-            underlineColor={GOBALCOLOR.COLORS.ORANAGE}
+            activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+            underlineColor={GOBALCOLOR.COLORS.BROWN}
           />
         </View>
         <View style={[styles.inputContainer, { marginTop: 10 }]}>
@@ -63,22 +63,24 @@ const SignUpScreen = (props) => {
             onChangeText={(text) => {
               setEmail(text);
             }}
-            activeUnderlineColor={GOBALCOLOR.COLORS.ORANAGE}
-            underlineColor={GOBALCOLOR.COLORS.ORANAGE}
+            activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+            underlineColor={GOBALCOLOR.COLORS.BROWN}
           />
         </View>
         <View style={[styles.inputContainer, { marginTop: 10 }]}>
           <TextInput
             mode="flat"
             label="Password"
+            secureTextEntry={showPassword}
             style={styles.input}
             value={password}
             keyboardType="default"
             onChangeText={(text) => {
               setPassword(text);
             }}
-            activeUnderlineColor={GOBALCOLOR.COLORS.ORANAGE}
-            underlineColor={GOBALCOLOR.COLORS.ORANAGE}
+            right={<TextInput.Icon icon="eye" iconColor={GOBALCOLOR.COLORS.BROWN} style={{ marginTop: 10 }} onPress={() => setShowPassword(!showPassword)} />}
+            activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+            underlineColor={GOBALCOLOR.COLORS.BROWN}
           />
         </View>
         <TouchableOpacity style={styles.buttonStyle} onPress={() => registerUser({

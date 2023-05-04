@@ -5,6 +5,7 @@ import { Snackbar } from 'react-native-paper';
 import { Toast } from 'native-base';
 
 const SignUpViewController = () => {
+    const [showPassword, setShowPassword] = useState(true);
     const navigation = useNavigation();
     const { userRegisteration } = SignUpViewModel();
 
@@ -29,7 +30,9 @@ const SignUpViewController = () => {
     }
 
     return {
-        registerUser
+        registerUser,
+        showPassword,
+        setShowPassword
     }
 
 }
