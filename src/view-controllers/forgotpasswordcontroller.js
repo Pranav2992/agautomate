@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import LoginViewModel from '../view-models/loginViewModal';
+import ForgotPasswordViewModel from '../view-models/forgotPasswordViewModal';
 import { Toast } from 'native-base';
 
 
-const LoginViewController = () => {
+const ForgotPasswordViewController = () => {
     const navigation = useNavigation();
-    const { userLogin } = LoginViewModel();
+    const { forgotPassword } = ForgotPasswordViewModel();
 
-    const LoginUser = (requestJson) => {
-        let apiResponse = userLogin(requestJson);
+    const forgotPasswordController = (requestJson) => {
+        let apiResponse = forgotPassword(requestJson);
         console.log("apiResponse--------->", apiResponse)
-        if (apiResponse === true) {
-            console.log("if apiResponse--------->", apiResponse)
-
+        if (apiResponse) {
             Toast.show({
                 variant: "solid",
-                text: 'User login successfully.',
+                text: 'Password send successfully.',
                 type: 'success',
                 duration: 6000
             });
-            navigation.navigate("DashboardScreen");
+            // navigation.navigate("DashboardScreen");
         }
         else {
             console.log("else calll...")
@@ -34,8 +32,8 @@ const LoginViewController = () => {
     }
 
     return {
-        LoginUser
+        forgotPasswordController
     }
 }
 
-export default LoginViewController;
+export default ForgotPasswordViewController;
