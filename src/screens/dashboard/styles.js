@@ -29,7 +29,7 @@ export default StyleSheet.create({
         top: '90%', //for center align
         right: '5%',
         alignSelf: 'flex-end', //for align to right
-        backgroundColor: GOBALCOLORS.COLORS.CHOKLETI,
+        backgroundColor: GOBALCOLORS.COLORS.BROWN,
         padding: 12,
         borderRadius: 10,
         shadowColor: GOBALCOLORS.COLORS.BLACK,
@@ -39,7 +39,13 @@ export default StyleSheet.create({
     },
     maBtnText: {
         color: GOBALCOLORS.COLORS.WHITE,
-        fontSize: 18,
+        fontSize: 12,
         fontWeight: 'bold'
-    }
+    },
+    backgroundVideo: {
+        width: 400,
+        height: 200,
+        justifyContent: 'center',
+        alignSelf: 'center'
+    },
 });

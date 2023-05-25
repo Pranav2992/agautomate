@@ -8,7 +8,13 @@ import SignUpViewController from "../../view-controllers/signupviewcontroller";
 
 const SignUpScreen = (props) => {
 
-  const { registerUser, setShowPassword, showPassword } = SignUpViewController();
+  const {
+    registerUser,
+    setShowPassword,
+    showPassword,
+    goBackScreen
+  } = SignUpViewController();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -18,7 +24,7 @@ const SignUpScreen = (props) => {
     <View style={styles.mainContainer}>
       <View style={styles.appBarContainer}>
         <View style={{ flexDirection: 'row', position: 'absolute', left: 5 }}>
-          <Ionicons name="arrow-back" size={35} style={{ margin: 10, color: '#FFF' }} />
+          <Ionicons name="arrow-back" size={35} style={{ margin: 10, color: '#FFF' }} onPress={() => goBackScreen()} />
         </View>
         <View style={{ marginLeft: 70 }}>
           <Text style={styles.appBarTitle}>Sign Up</Text>

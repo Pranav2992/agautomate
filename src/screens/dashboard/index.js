@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Dimensions, BackHandler, TouchableOpacity, Image } from "react-native";
 import styles from "./styles";
 import MapView, { Marker, PROVIDER_GOOGLE, Polygon, Overlay } from 'react-native-maps';
+import { connect, useSelector, useDispatch } from "react-redux";
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
     Container,
@@ -29,11 +30,16 @@ import {
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import DashboardController from "../../view-controllers/dashboardcontroller";
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 const DashboardScreen = (props) => {
+
+    const { setAccessToken, setUserId, sendCoordinatesToServer, userId, accessToken } = DashboardController();
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -50,6 +56,11 @@ const DashboardScreen = (props) => {
         setMarkers(markers => [...markers, coordinate])
     }
 
+    useEffect(() => {
+        AsyncStorage.getItem('accessToken').then((accessToken) => { setAccessToken(accessToken) });
+        AsyncStorage.getItem('userId').then((userId) => { setUserId(userId) });
+    }, []);
+
     return (
         <View style={styles.mainContainer}>
 
@@ -58,6 +69,14 @@ const DashboardScreen = (props) => {
                     <Text style={styles.appBarTitle}>Dashboard</Text>
                 </View>
                 <View style={{ flexDirection: 'row', position: 'absolute', right: 0 }}>
+                    <Ionicons name="cloud-upload-outline" size={35} style={{ margin: 10, color: '#FFF' }}
+                        onPress={() => sendCoordinatesToServer(
+                            {
+                                "farmerId": userId,
+                                "authToken": accessToken,
+                                "coordinate": markers
+                            }
+                        )} />
                     <Ionicons name="person-circle-outline" size={35} style={{ margin: 10, color: '#FFF' }} />
                     <Ionicons name="exit-outline" size={35} style={{ margin: 10, color: '#FFF' }} />
                 </View>
@@ -112,7 +131,7 @@ const DashboardScreen = (props) => {
                     {markers.length > 0 && markers.map((marker, i) => {
                         console.log('marker ==', marker)
                         return (
-                            <Marker coordinate={marker} key={i} draggable/>
+                            <Marker coordinate={marker} key={i} draggable />
                         )
                     })}
                     {/*  <Marker
@@ -139,4 +158,4 @@ const DashboardScreen = (props) => {
     )
 };
 
-export default DashboardScreen;
+export default connect(null, null)(DashboardScreen);

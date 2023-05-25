@@ -7,7 +7,7 @@ import LoginViewController from "../../view-controllers/loginviewcontroller";
 
 const SignInScreen = (props) => {
 
-  const { LoginUser } = LoginViewController();
+  const { LoginUser, showPassword, setShowPassword } = LoginViewController();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,22 +24,24 @@ const SignInScreen = (props) => {
           onChangeText={(text) => {
             setEmail(text);
           }}
-          activeUnderlineColor={GOBALCOLOR.COLORS.ORANAGE}
-          underlineColor={GOBALCOLOR.COLORS.ORANAGE}
+          activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+          underlineColor={GOBALCOLOR.COLORS.BROWN}
         />
       </View>
       <View style={[styles.inputContainer, { marginTop: 20 }]}>
         <TextInput
           mode="flat"
           label="Password"
+          secureTextEntry={showPassword}
           style={styles.input}
           value={password}
           keyboardType="default"
           onChangeText={(text) => {
             setPassword(text);
           }}
-          activeUnderlineColor={GOBALCOLOR.COLORS.ORANAGE}
-          underlineColor={GOBALCOLOR.COLORS.ORANAGE}
+          right={<TextInput.Icon icon="eye" iconColor={GOBALCOLOR.COLORS.BROWN} style={{ marginTop: 10 }} onPress={() => setShowPassword(!showPassword)} />}
+          activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+          underlineColor={GOBALCOLOR.COLORS.BROWN}
         />
       </View>
       <TouchableOpacity style={styles.buttonStyle} onPress={() => LoginUser({

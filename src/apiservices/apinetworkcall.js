@@ -3,15 +3,16 @@ import axios from 'axios';
 import { Toast } from "native-base";
 
 export default Network = (endpoint, method, body) => {
+    console.log('body ==', body.authToken)
     return new Promise((resolve, reject) => {
         NetInfo.fetch().then(state => {
             if (state.isConnected) {
-                if (method == "get") {
+                if (method == "GET") {
                     axios({
                         method,
                         url: `${endpoint}`,
                         headers: {
-                            'x-access-token': body.authToken ? body.authToken : null,
+                            'Authorization': body.authToken ? body.authToken : null,
                         }
                     }).then(function (response) {
                         resolve(response)
@@ -30,7 +31,7 @@ export default Network = (endpoint, method, body) => {
                         url: `${endpoint}`,
                         headers: {
                             'Content-Type': 'application/json',
-                            'x-access-token': body?.authToken
+                            'Authorization': body?.authToken
                         },
                         data: body
                     }).then(function (response) {

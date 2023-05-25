@@ -9,6 +9,10 @@ const SignUpViewController = () => {
     const navigation = useNavigation();
     const { userRegisteration } = SignUpViewModel();
 
+    const goBackScreen = () => {
+        navigation.goBack();
+    }
+
     const registerUser = (requestJson) => {
         let apiResponse = userRegisteration(requestJson);
         if (apiResponse) {
@@ -32,7 +36,8 @@ const SignUpViewController = () => {
     return {
         registerUser,
         showPassword,
-        setShowPassword
+        setShowPassword,
+        goBackScreen
     }
 
 }

@@ -1,9 +1,11 @@
+/* Created By Pranav  */
+
 import { LOGIN_API, USER_REGISTER_API, FORGOT_PASSWORD_API } from "../types";
 
 const initialState = {
-    loginResponse: true,
-    userRegisterResponse: true,
-    forgotPasswordResponse: true
+    loginResponse: false,
+    userRegisterResponse: false,
+    forgotPasswordResponse: false,
 }
 
 export default (state = initialState, action) => {

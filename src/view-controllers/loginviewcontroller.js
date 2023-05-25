@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import LoginViewModel from '../view-models/loginViewModal';
+import { useSelector } from 'react-redux';
 import { Toast } from 'native-base';
 
 
 const LoginViewController = () => {
+    const [showPassword, setShowPassword] = useState(true);
     const navigation = useNavigation();
     const { userLogin } = LoginViewModel();
 
-    const LoginUser = (requestJson) => {
-        let apiResponse = userLogin(requestJson);
+    const LoginUser = async (requestJson) => {
+        let apiResponse = await userLogin(requestJson);
         console.log("apiResponse--------->", apiResponse)
+
         if (apiResponse === true) {
             console.log("if apiResponse--------->", apiResponse)
 
@@ -34,7 +37,9 @@ const LoginViewController = () => {
     }
 
     return {
-        LoginUser
+        LoginUser,
+        showPassword,
+        setShowPassword
     }
 }
 
