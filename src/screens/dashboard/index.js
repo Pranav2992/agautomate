@@ -1,8 +1,14 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Dimensions, BackHandler, TouchableOpacity, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Dimensions, BackHandler, TouchableOpacity, Image, ActivityIndicator, Alert } from "react-native";
 import styles from "./styles";
 import MapView, { Marker, PROVIDER_GOOGLE, Polygon, Overlay } from 'react-native-maps';
 import { connect, useSelector, useDispatch } from "react-redux";
+import { SHOW_MODAL } from '../../store/types';
+import { TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
+import Modal from "react-native-modal";
+import GOBALCOLOR from '../../gobalconstant/colors';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
     Container,
@@ -30,24 +36,33 @@ import {
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useEffect } from "react";
+import GetLocation from "react-native-get-location";
+import Geocoder from "react-native-geocoder";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DashboardController from "../../view-controllers/dashboardcontroller";
+
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 const DashboardScreen = (props) => {
 
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
     const { setAccessToken, setUserId, sendCoordinatesToServer, userId, accessToken } = DashboardController();
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [items, setItems] = useState([
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' }
+        { label: 'Yeild', value: '1' },
+        { label: 'Pol In Cane', value: '2' },
+        { label: 'Water Stress', value: '3' }
     ]);
 
+    const [lat, setLat] = useState(16.7086167);
+    const [long, setLong] = useState(74.1564648);
+    const [loadMap, setLoadMap] = useState(false);
+    //const [isShowModal, setIsShowModal] = useState(false);
     const [markers, setMarkers] = useState([]);
 
     const check = (coordinate) => {
@@ -56,10 +71,51 @@ const DashboardScreen = (props) => {
         setMarkers(markers => [...markers, coordinate])
     }
 
+    const { isShowModal } = useSelector((state) => state.appReducers);
+    const { sendCoordinatesResponse } = useSelector((state) => state.apiCallReducers);
+
     useEffect(() => {
+        console.log('isShowModal ===', isShowModal)
+        console.log('sendCoordinatesResponse ===', sendCoordinatesResponse)
         AsyncStorage.getItem('accessToken').then((accessToken) => { setAccessToken(accessToken) });
         AsyncStorage.getItem('userId').then((userId) => { setUserId(userId) });
-    }, []);
+        GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 10000,
+        })
+            .then((location) => {
+                var pos = {
+                    lat: location.latitude,
+                    lng: location.longitude,
+                };
+                console.log("location ==", location)
+                setLat(location.latitude);
+                setLong(location.longitude);
+                setLoadMap(true);
+
+                /* Geocoder.geocodePosition(pos)
+                    .then((res) => {
+                        let addressObj = res.length >= 0 ? res[0] : null;
+                        setFetching(false);
+                        const loc = {
+                            ...location,
+                            address: addressObj ? addressObj.formattedAddress : "",
+                        };
+                        props.updateDeviceAddress(loc);
+                    })
+                    .catch((err) => {
+                        setFetching(false);
+                        if (err == "gprc failed") {
+                            onLocationFetch();
+                        }
+                    }); */
+            })
+            .catch((error) => {
+                /* setFetching(false); */
+                console.log("error ==", error)
+                const { code, message } = error;
+            });
+    }, [sendCoordinatesResponse, isShowModal]);
 
     return (
         <View style={styles.mainContainer}>
@@ -69,90 +125,156 @@ const DashboardScreen = (props) => {
                     <Text style={styles.appBarTitle}>Dashboard</Text>
                 </View>
                 <View style={{ flexDirection: 'row', position: 'absolute', right: 0 }}>
-                    <Ionicons name="cloud-upload-outline" size={35} style={{ margin: 10, color: '#FFF' }}
-                        onPress={() => sendCoordinatesToServer(
-                            {
-                                "farmerId": userId,
-                                "authToken": accessToken,
-                                "coordinate": markers
-                            }
-                        )} />
+                    {/*  <Ionicons name="cloud-upload-outline" size={35} style={{ margin: 10, color: '#FFF' }}
+                    /> */}
                     <Ionicons name="person-circle-outline" size={35} style={{ margin: 10, color: '#FFF' }} />
-                    <Ionicons name="exit-outline" size={35} style={{ margin: 10, color: '#FFF' }} />
+                    <Ionicons name="exit-outline" size={35} style={{ margin: 10, color: '#FFF' }} onPress={() => {
+                        Alert.alert('Logout', 'Do you want to logout?', [
+                            {
+                                text: 'Cancel',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                            },
+                            {
+                                text: 'OK', onPress: () => {
+                                    AsyncStorage.setItem('isLogged', 'false');
+                                    dispatch({ type: 'USER_LOGGED', userLogged: false })
+                                    navigation.dispatch(StackActions.popToTop());
+                                }
+                            },
+                        ]);
+                    }} />
                 </View>
             </View>
 
             <View style={styles.dropdownContainer}>
-                <DropDownPicker
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
-                />
+                <View style={[styles.inputContainer]}>
+                    <TextInput
+                        mode="flat"
+                        label="Crop Name"
+                        style={styles.input}
+                        value={'Sugarcane'}
+                        keyboardType="email-address"
+                        onChangeText={(text) => {
+
+                        }}
+                        activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+                        underlineColor={GOBALCOLOR.COLORS.BROWN}
+                    />
+                </View>
+                <View style={[styles.inputContainer, { marginTop: 10 }]}>
+                    <DropDownPicker
+                        style={styles.inputDropdown}
+                        open={open}
+                        value={value}
+                        items={items}
+                        listMode="MODAL"
+                        setOpen={setOpen}
+                        setValue={setValue}
+                        setItems={setItems}
+                    />
+                </View>
             </View>
             <View style={{
-                flex: 1,
-                width: deviceWidth,
-                position: 'absolute',
-                bottom: 0,
+                margin: 5,
+                /* width: deviceWidth, */
+                /*  position: 'absolute',
+                 bottom: 0, */
                 overflow: 'hidden',
-                borderTopLeftRadius: 25,
-                borderTopRightRadius: 25,
-                shadowColor: '#000',
-                shadowOffset: { width: 1, height: 1 },
-                shadowOpacity: 0.2,
-                elevation: 7
+                /* borderTopLeftRadius: 25,
+                borderTopRightRadius: 25, */
+                /*  shadowColor: '#000',
+                 shadowOffset: { width: 1, height: 1 },
+                 shadowOpacity: 0.2, */
+                height: '65%',
+                justifyContent: 'center',
+                alignItems: 'center'
+                /* elevation: 7 */
             }}>
-                <MapView
-                    mapType="hybrid"
-                    style={{
-                        height: deviceHeight * 0.83,
-                        width: deviceWidth,
-                    }}
-                    initialRegion={{
-                        latitude: 16.7086167,
-                        longitude: 74.1564648,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
+                {loadMap ?
+                    <View style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        left: 0,
+                        top: 0
+                    }}>
+                        <MapView
+                            mapType="hybrid"
+                            style={{
+                                height: deviceHeight * 0.83,
+                                width: deviceWidth,
+                            }}
+                            initialRegion={{
+                                latitude: lat,
+                                longitude: long,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }}
 
-                    onPress={(e) => check(e.nativeEvent.coordinate)}
-                >
-                    {markers.length > 4 && < Polygon
-                        coordinates={markers}
-                        strokeColor="#000"
-                        strokeWidth={2}
-                        fillColor="#00000022"
-                    >
-                    </Polygon>}
+                            onPress={(e) => check(e.nativeEvent.coordinate)}
+                        >
+                            {markers.length > 4 && < Polygon
+                                coordinates={markers}
+                                strokeColor="#000"
+                                strokeWidth={2}
+                                fillColor="#00000022"
+                            >
+                            </Polygon>}
 
-                    {markers.length > 0 && markers.map((marker, i) => {
-                        console.log('marker ==', marker)
-                        return (
-                            <Marker coordinate={marker} key={i} draggable />
-                        )
-                    })}
-                    {/*  <Marker
-    key={1}
-    draggable
-    coordinate={{
-        "latitude": 16.686109,
-        "longitude": 74.186840,
-    }}
-    onDragEnd={(e) => {
-        console.log('e ==>>', e.nativeEvent.coordinate)
-    }}
-/> */}
-                </MapView>
-                <TouchableOpacity
-                    style={styles.mapBtn}
-                    onPress={() => setMarkers([])}
-                >
-                    <Text style={styles.maBtnText}>Clear Area Section</Text>
+                            {markers.length > 0 && markers.map((marker, i) => {
+                                console.log('marker ==', marker)
+                                return (
+                                    <Marker coordinate={marker} key={i} draggable />
+                                )
+                            })}
+                        </MapView>
+                        <TouchableOpacity
+                            style={styles.mapBtn}
+                            onPress={() => setMarkers([])}
+                        >
+                            <Text style={styles.maBtnText}>Clear Area Section</Text>
+                        </TouchableOpacity>
+                    </View>
+                    : <ActivityIndicator color={GOBALCOLOR.COLORS.DARK_BLUE} size={"large"} />}
+            </View>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity style={styles.buttonStyle} onPress={() => sendCoordinatesToServer(
+                    {
+                        "FarmerId": userId,
+                        "authToken": accessToken,
+                        "Coordinate": markers,
+                        "ParameterId": value
+                    }
+                )}>
+                    <Text style={styles.buttonText}>Generate Report</Text>
                 </TouchableOpacity>
             </View>
+
+            <Modal
+                isVisible={isShowModal}
+                animationIn="bounceIn"
+                animationOut="bounceOut"
+                coverScreen={true}
+                hasBackdrop={true}
+                animationInTiming={500}
+                animationOutTiming={500}
+                backdropTransitionInTiming={500}
+                backdropTransitionOutTiming={500}
+                backdropColor="black"
+                backdropOpacity={0.70}
+            >
+                <View style={{ borderRadius: 5, padding: 20, width: '100%', alignItems: 'center', alignSelf: 'center', backgroundColor: GOBALCOLOR.COLORS.WHITE }}>
+                    <Text style={{ marginBottom: 30, color: GOBALCOLOR.COLORS.BLACK, fontSize: 20, fontWeight: 'bold' }}>Generated Report</Text>
+                    {/* <Image source={{ uri: 'https://picsum.photos/seed/picsum/200/300' }} style={{ width: 300, height: 200 }} resizeMode="stretch" /> */}
+                    {value === '1' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected yield ${sendCoordinatesResponse?.ParameterValue} tonne/ha`}</Text>}
+                    {value === '2' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected pol in cane ${sendCoordinatesResponse?.ParameterValue}`}</Text>}
+                    {value === '3' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected water stress ${sendCoordinatesResponse?.ParameterValue}`}</Text>}
+                    <TouchableOpacity style={{ marginTop: 20 }} onPress={() => dispatch({ type: SHOW_MODAL, isShowModal: false })}>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', color: GOBALCOLOR.COLORS.BLUE }}>Close</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
 
         </View >
     )

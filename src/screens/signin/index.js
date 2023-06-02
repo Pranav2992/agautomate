@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Dimensions, BackHandler, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, Dimensions, BackHandler, TouchableOpacity, ActivityIndicator, Image } from "react-native";
 import styles from "./styles";
 import { TextInput } from 'react-native-paper';
 import GOBALCOLOR from '../../gobalconstant/colors';
+import { connect } from "react-redux";
 import LoginViewController from "../../view-controllers/loginviewcontroller";
 
 const SignInScreen = (props) => {
@@ -62,4 +63,4 @@ const SignInScreen = (props) => {
   )
 };
 
-export default SignInScreen;
+export default connect(null, null)(SignInScreen);

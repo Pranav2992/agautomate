@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Toast } from "native-base";
 
 export default Network = (endpoint, method, body) => {
-    console.log('body ==', body.authToken)
+    console.log('body ==', body)
     return new Promise((resolve, reject) => {
         NetInfo.fetch().then(state => {
             if (state.isConnected) {

@@ -7,13 +7,13 @@ import { Root } from "native-base";
 
 const App = () => {
   return (
-    <Root>
-      <Provider store={store}>
+    <Provider store={store}>
+      <Root>
         <NavigationContainer>
           <Navigation />
         </NavigationContainer>
-      </Provider>
-    </Root>
+      </Root>
+    </Provider>
   );
 };
 

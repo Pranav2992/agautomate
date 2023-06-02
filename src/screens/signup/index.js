@@ -12,13 +12,13 @@ const SignUpScreen = (props) => {
     registerUser,
     setShowPassword,
     showPassword,
-    goBackScreen
+    goBackScreen,
+    userName,
+    email, firstName, lastName, mobileNumber, password,
+    setEmail, setFirstName, setLastName, setMobileNumber, setPassword, setUserName
   } = SignUpViewController();
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
 
   return (
     <View style={styles.mainContainer}>
@@ -31,7 +31,21 @@ const SignUpScreen = (props) => {
         </View>
       </View>
       <View style={{ justifyContent: 'center', alignItems: 'center', margin: 10 }}>
-        <View style={[styles.inputContainer, { marginTop: 20 }]}>
+        <View style={[styles.inputContainer, { marginTop: 10 }]}>
+          <TextInput
+            mode="flat"
+            label="User Name"
+            style={styles.input}
+            value={userName}
+            keyboardType="default"
+            onChangeText={(text) => {
+              setUserName(text);
+            }}
+            activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+            underlineColor={GOBALCOLOR.COLORS.BROWN}
+          />
+        </View>
+        <View style={[styles.inputContainer, { marginTop: 10 }]}>
           <TextInput
             mode="flat"
             label="First Name"
@@ -89,12 +103,27 @@ const SignUpScreen = (props) => {
             underlineColor={GOBALCOLOR.COLORS.BROWN}
           />
         </View>
+        <View style={[styles.inputContainer, { marginTop: 10 }]}>
+          <TextInput
+            mode="flat"
+            label="Mobile Number"
+            style={styles.input}
+            value={mobileNumber}
+            keyboardType="phone-pad"
+            onChangeText={(text) => {
+              setMobileNumber(text);
+            }}
+            activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+            underlineColor={GOBALCOLOR.COLORS.BROWN}
+          />
+        </View>
         <TouchableOpacity style={styles.buttonStyle} onPress={() => registerUser({
-          "firstName": firstName,
-          "lastName": lastName,
+          "UserName": userName,
+          "FirstName": firstName,
+          "LastName": lastName,
           "email": email,
           "password": password,
-          "roleId": 0
+          "MobileNo": mobileNumber
         })} >
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>

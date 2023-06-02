@@ -1,16 +1,18 @@
 /* Created By Pranav  */
 
-import { LOGIN_API, USER_REGISTER_API, FORGOT_PASSWORD_API } from "../types";
+import { LOGIN_API, USER_REGISTER_API, FORGOT_PASSWORD_API, SEND_COORDINATE_API } from "../types";
 
 const initialState = {
     loginResponse: false,
     userRegisterResponse: false,
     forgotPasswordResponse: false,
+    sendCoordinatesResponse: null,
 }
 
 export default (state = initialState, action) => {
-    switch (action) {
+    switch (action.type) {
         case LOGIN_API:
+            console.log('================================LOGIN_API=========================================')
             return {
                 ...state,
                 loginResponse: action.apiResponse
@@ -24,6 +26,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 forgotPasswordResponse: action.apiResponse
+            }
+        case SEND_COORDINATE_API:
+            console.log('comes in SEND_COORDINATE_API ')
+            return {
+                ...state,
+                sendCoordinatesResponse: action.apiResponse,
             }
         default:
             return state;

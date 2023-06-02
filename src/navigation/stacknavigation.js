@@ -2,12 +2,13 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 //import screens
-import Splash from '../screens/splash';
-import SignIn from '../screens/signin';
-import SignUp from '../screens/signup';
-import Profile from '../screens/profile';
-import ForgetPassword from '../screens/forgetpassword';
+import SplashScreen from '../screens/splash';
+import SignInScreen from '../screens/signin';
+import SignUpScreen from '../screens/signup';
+import ProfileScreen from '../screens/profile';
+import ForgetPasswordScreen from '../screens/forgetpassword';
 import DashboardScreen from '../screens/dashboard';
+import VerifyOtpScreen from '../screens/verifyotp';
 
 const Stack = createStackNavigator();
 
@@ -38,35 +39,35 @@ const StackNavigation = (props) => {
                     headerShown: null
                 }}
                 name="SplashScreen"
-                component={Splash}
+                component={SplashScreen}
             />
             <Stack.Screen
                 options={{
                     headerShown: null
                 }}
                 name="SignInScreen"
-                component={SignIn}
+                component={SignInScreen}
             />
             <Stack.Screen
                 options={{
                     headerShown: null
                 }}
                 name="SignUpScreen"
-                component={SignUp}
+                component={SignUpScreen}
             />
             <Stack.Screen
                 options={{
                     headerShown: null
                 }}
                 name="ProfileScreen"
-                component={Profile}
+                component={ProfileScreen}
             />
             <Stack.Screen
                 options={{
                     headerShown: null
                 }}
                 name="ForgetPasswordScreen"
-                component={ForgetPassword}
+                component={ForgetPasswordScreen}
             />
             <Stack.Screen
                 options={{
@@ -74,6 +75,13 @@ const StackNavigation = (props) => {
                 }}
                 name="DashboardScreen"
                 component={DashboardScreen}
+            />
+            <Stack.Screen
+                options={{
+                    headerShown: null
+                }}
+                name="VerifyOtpScreen"
+                component={VerifyOtpScreen}
             />
         </Stack.Navigator>
     );

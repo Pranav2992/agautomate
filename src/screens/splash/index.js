@@ -1,17 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, Text, StatusBar } from "react-native";
 import styles from '../splash/styles';
+import { useFocusEffect } from '@react-navigation/native';
 import GOBALCOLORS from '../../gobalconstant/colors';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { connect, useSelector } from "react-redux";
 
 const SplashScreen = (props) => {
 
+    const { userLogged } = useSelector((state) => state.appReducers)
     const [hidden, setHidden] = useState(false);
 
     useEffect(() => {
+        console.log('splash screen use effect called ', userLogged)
         setTimeout(() => {
-            props.navigation.navigate('SignInScreen');
+
+            AsyncStorage.getItem('isLogged').then((result) => {
+                if (result === 'true') {
+                    props.navigation.navigate('DashboardScreen');
+                } else {
+                    props.navigation.navigate('SignInScreen');
+                }
+            });
+
         }, 2000);
-    }, []);
+    }, [userLogged]);
+
+    useFocusEffect(
+        useCallback(() => {
+            setTimeout(() => {
+
+                AsyncStorage.getItem('isLogged').then((result) => {
+                    if (result === 'true') {
+                        props.navigation.navigate('DashboardScreen');
+                    } else {
+                        props.navigation.navigate('SignInScreen');
+                    }
+                });
+
+            }, 2000);
+        }, [userLogged])
+    )
 
     return (
         <View style={styles.mainContainer}>
@@ -25,5 +54,5 @@ const SplashScreen = (props) => {
     )
 };
 
-export default SplashScreen;
+export default connect(null, null)(SplashScreen);
 
