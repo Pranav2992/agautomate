@@ -10,12 +10,12 @@ export default StyleSheet.create({
     },
     text: {
         color: GOBALCOLORS.COLORS.GREEN_1,
-        fontSize: 50,
+        fontSize: 40,
         fontWeight: 'bold',
     },
     text1: {
         color: GOBALCOLORS.COLORS.ORANAGE,
-        fontSize: 50,
+        fontSize: 40,
         fontWeight: 'bold',
     }
 })

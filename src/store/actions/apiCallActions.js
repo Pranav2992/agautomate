@@ -1,6 +1,6 @@
 import ENDPOINT from '../../apiservices/apiendpoints';
 import NETWORK from '../../apiservices/apinetworkcall';
-import { LOGIN_API, FORGOT_PASSWORD_API, USER_REGISTER_API, SEND_COORDINATE_API, USER_LOGGED, SHOW_MODAL } from '../types';
+import { LOGIN_API, FORGOT_PASSWORD_API, USER_REGISTER_API, SEND_COORDINATE_API, USER_LOGGED, SHOW_MODAL, SHOW_PROGRESS } from '../types';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import store from '../index'
 
@@ -66,13 +66,17 @@ export const sendCoordinates = (data) => async dispatch => {
         let result = await NETWORK(ENDPOINT.SEND_COORDINATE, 'POST', data);
         console.log('sendCoordinates result ==', result.status);
         if (result.status == 200) {
+
             await dispatch({ type: SEND_COORDINATE_API, apiResponse: result.data });
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             await dispatch({ type: SHOW_MODAL, isShowModal: true })
             return true;
         } else {
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             return false;
         }
     } catch (exception) {
+        await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
         return false;
     }
 }

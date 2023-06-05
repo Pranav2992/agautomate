@@ -1,9 +1,10 @@
 /* -------- Created by Pranav on 30-05-2023 ------- */
-import { USER_LOGGED, SHOW_MODAL } from "../types";
+import { USER_LOGGED, SHOW_MODAL, SHOW_PROGRESS } from "../types";
 
 const initialState = {
     userLogged: false,
-    isShowModal: false
+    isShowModal: false,
+    isProgressShow: false
 }
 
 export default (state = initialState, action) => {
@@ -17,6 +18,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isShowModal: action.isShowModal
+            }
+        case SHOW_PROGRESS:
+            return {
+                ...state,
+                isProgressShow: action.isProgressShow
             }
         default:
             return state;

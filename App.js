@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Text, TextInput, LogBox, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Navigation from './src/navigation/stacknavigation';
 import { Provider } from 'react-redux';
 import store from './src/store';
 import { Root } from "native-base";
 
-const App = () => {
+const App = (props) => {
+  LogBox.ignoreAllLogs();
+  useEffect(() => {
+    if (Text.defaultProps == null) Text.defaultProps = {};
+    Text.defaultProps.allowFontScaling = false;
+    if (TextInput.defaultProps == null) TextInput.defaultProps = {};
+    TextInput.defaultProps.allowFontScaling = false;
+  }, []);
+
+
   return (
     <Provider store={store}>
       <Root>

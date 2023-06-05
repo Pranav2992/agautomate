@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, BackHandler, TouchableOpacity, Imag
 import styles from "./styles";
 import MapView, { Marker, PROVIDER_GOOGLE, Polygon, Overlay } from 'react-native-maps';
 import { connect, useSelector, useDispatch } from "react-redux";
-import { SHOW_MODAL } from '../../store/types';
+import { SHOW_MODAL, SHOW_PROGRESS } from '../../store/types';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackActions } from '@react-navigation/native';
@@ -40,6 +40,7 @@ import GetLocation from "react-native-get-location";
 import Geocoder from "react-native-geocoder";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DashboardController from "../../view-controllers/dashboardcontroller";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 const deviceWidth = Dimensions.get('window').width;
@@ -71,7 +72,7 @@ const DashboardScreen = (props) => {
         setMarkers(markers => [...markers, coordinate])
     }
 
-    const { isShowModal } = useSelector((state) => state.appReducers);
+    const { isShowModal, isProgressShow } = useSelector((state) => state.appReducers);
     const { sendCoordinatesResponse } = useSelector((state) => state.apiCallReducers);
 
     useEffect(() => {
@@ -88,7 +89,7 @@ const DashboardScreen = (props) => {
                     lat: location.latitude,
                     lng: location.longitude,
                 };
-                console.log("location ==", location)
+                //console.log("location ==", location)
                 setLat(location.latitude);
                 setLong(location.longitude);
                 setLoadMap(true);
@@ -115,7 +116,9 @@ const DashboardScreen = (props) => {
                 console.log("error ==", error)
                 const { code, message } = error;
             });
-    }, [sendCoordinatesResponse, isShowModal]);
+    }, [sendCoordinatesResponse]);
+
+
 
     return (
         <View style={styles.mainContainer}>
@@ -146,110 +149,114 @@ const DashboardScreen = (props) => {
                     }} />
                 </View>
             </View>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }} scrollToOverflowEnabled={true}>
+                <View style={styles.dropdownContainer}>
+                    <View style={[styles.inputContainer]}>
+                        <TextInput
+                            mode="flat"
+                            label="Crop Name"
+                            style={styles.input}
+                            value={'Sugarcane'}
+                            keyboardType="email-address"
+                            onChangeText={(text) => {
 
-            <View style={styles.dropdownContainer}>
-                <View style={[styles.inputContainer]}>
-                    <TextInput
-                        mode="flat"
-                        label="Crop Name"
-                        style={styles.input}
-                        value={'Sugarcane'}
-                        keyboardType="email-address"
-                        onChangeText={(text) => {
-
-                        }}
-                        activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
-                        underlineColor={GOBALCOLOR.COLORS.BROWN}
-                    />
-                </View>
-                <View style={[styles.inputContainer, { marginTop: 10 }]}>
-                    <DropDownPicker
-                        style={styles.inputDropdown}
-                        open={open}
-                        value={value}
-                        items={items}
-                        listMode="MODAL"
-                        setOpen={setOpen}
-                        setValue={setValue}
-                        setItems={setItems}
-                    />
-                </View>
-            </View>
-            <View style={{
-                margin: 5,
-                /* width: deviceWidth, */
-                /*  position: 'absolute',
-                 bottom: 0, */
-                overflow: 'hidden',
-                /* borderTopLeftRadius: 25,
-                borderTopRightRadius: 25, */
-                /*  shadowColor: '#000',
-                 shadowOffset: { width: 1, height: 1 },
-                 shadowOpacity: 0.2, */
-                height: '65%',
-                justifyContent: 'center',
-                alignItems: 'center'
-                /* elevation: 7 */
-            }}>
-                {loadMap ?
-                    <View style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        right: 0,
-                        left: 0,
-                        top: 0
-                    }}>
-                        <MapView
-                            mapType="hybrid"
-                            style={{
-                                height: deviceHeight * 0.83,
-                                width: deviceWidth,
                             }}
-                            initialRegion={{
-                                latitude: lat,
-                                longitude: long,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421,
-                            }}
-
-                            onPress={(e) => check(e.nativeEvent.coordinate)}
-                        >
-                            {markers.length > 4 && < Polygon
-                                coordinates={markers}
-                                strokeColor="#000"
-                                strokeWidth={2}
-                                fillColor="#00000022"
-                            >
-                            </Polygon>}
-
-                            {markers.length > 0 && markers.map((marker, i) => {
-                                console.log('marker ==', marker)
-                                return (
-                                    <Marker coordinate={marker} key={i} draggable />
-                                )
-                            })}
-                        </MapView>
-                        <TouchableOpacity
-                            style={styles.mapBtn}
-                            onPress={() => setMarkers([])}
-                        >
-                            <Text style={styles.maBtnText}>Clear Area Section</Text>
-                        </TouchableOpacity>
+                            activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
+                            underlineColor={GOBALCOLOR.COLORS.BROWN}
+                        />
                     </View>
-                    : <ActivityIndicator color={GOBALCOLOR.COLORS.DARK_BLUE} size={"large"} />}
-            </View>
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity style={styles.buttonStyle} onPress={() => sendCoordinatesToServer(
-                    {
-                        "FarmerId": userId,
-                        "authToken": accessToken,
-                        "Coordinate": markers,
-                        "ParameterId": value
-                    }
-                )}>
-                    <Text style={styles.buttonText}>Generate Report</Text>
-                </TouchableOpacity>
-            </View>
+                    <View style={[styles.inputContainer, { marginTop: 10 }]}>
+                        <DropDownPicker
+                            style={styles.inputDropdown}
+                            open={open}
+                            value={value}
+                            items={items}
+                            listMode="MODAL"
+                            setOpen={setOpen}
+                            setValue={setValue}
+                            setItems={setItems}
+                        />
+                    </View>
+                </View>
+                <View style={{
+                    margin: 5,
+                    /* width: deviceWidth, */
+                    /*  position: 'absolute',
+                     bottom: 0, */
+                    overflow: 'hidden',
+                    /* borderTopLeftRadius: 25,
+                    borderTopRightRadius: 25, */
+                    /*  shadowColor: '#000',
+                     shadowOffset: { width: 1, height: 1 },
+                     shadowOpacity: 0.2, */
+                    height: '65%',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                    /* elevation: 7 */
+                }}>
+                    {loadMap ?
+                        <View style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 0,
+                            left: 0,
+                            top: 0
+                        }}>
+                            <MapView
+                                mapType="hybrid"
+                                style={{
+                                    height: deviceHeight * 0.83,
+                                    width: deviceWidth,
+                                }}
+                                initialRegion={{
+                                    latitude: lat,
+                                    longitude: long,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,
+                                }}
+
+                                onPress={(e) => check(e.nativeEvent.coordinate)}
+                            >
+                                {markers.length > 4 && < Polygon
+                                    coordinates={markers}
+                                    strokeColor="#000"
+                                    strokeWidth={2}
+                                    fillColor="#00000022"
+                                >
+                                </Polygon>}
+
+                                {markers.length > 0 && markers.map((marker, i) => {
+                                    console.log('marker ==', marker)
+                                    return (
+                                        <Marker coordinate={marker} key={i} draggable />
+                                    )
+                                })}
+                            </MapView>
+                            <TouchableOpacity
+                                style={styles.mapBtn}
+                                onPress={() => setMarkers([])}
+                            >
+                                <Text style={styles.maBtnText}>Clear Area Section</Text>
+                            </TouchableOpacity>
+                        </View>
+                        : <ActivityIndicator color={GOBALCOLOR.COLORS.DARK_BLUE} size={"large"} />}
+                </View>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity style={styles.buttonStyle} onPress={() => {
+                        sendCoordinatesToServer(
+                            {
+                                "FarmerId": userId,
+                                "authToken": accessToken,
+                                "Coordinate": markers,
+                                "ParameterId": value
+                            }
+                        );
+                    }}>
+                        <Text style={styles.buttonText}>Generate Report</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </ScrollView>
 
             <Modal
                 isVisible={isShowModal}
@@ -267,12 +274,31 @@ const DashboardScreen = (props) => {
                 <View style={{ borderRadius: 5, padding: 20, width: '100%', alignItems: 'center', alignSelf: 'center', backgroundColor: GOBALCOLOR.COLORS.WHITE }}>
                     <Text style={{ marginBottom: 30, color: GOBALCOLOR.COLORS.BLACK, fontSize: 20, fontWeight: 'bold' }}>Generated Report</Text>
                     {/* <Image source={{ uri: 'https://picsum.photos/seed/picsum/200/300' }} style={{ width: 300, height: 200 }} resizeMode="stretch" /> */}
-                    {value === '1' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected yield ${sendCoordinatesResponse?.ParameterValue} tonne/ha`}</Text>}
-                    {value === '2' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected pol in cane ${sendCoordinatesResponse?.ParameterValue}`}</Text>}
-                    {value === '3' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected water stress ${sendCoordinatesResponse?.ParameterValue}`}</Text>}
+                    {value === '1' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected yield ${parseFloat(sendCoordinatesResponse?.data.ParameterValue).toFixed(2)} tonne/ha`}</Text>}
+                    {value === '2' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected pol in cane ${parseFloat(sendCoordinatesResponse?.data.ParameterValue).toFixed(2)}`}</Text>}
+                    {value === '3' && <Text style={{ marginBottom: 10, marginTop: 10, color: GOBALCOLOR.COLORS.BLACK, fontSize: 16 }}>{`Your expected water stress ${parseFloat(sendCoordinatesResponse?.data.ParameterValue).toFixed(2)}`}</Text>}
                     <TouchableOpacity style={{ marginTop: 20 }} onPress={() => dispatch({ type: SHOW_MODAL, isShowModal: false })}>
                         <Text style={{ fontSize: 16, fontWeight: 'bold', color: GOBALCOLOR.COLORS.BLUE }}>Close</Text>
                     </TouchableOpacity>
+                </View>
+            </Modal>
+
+            <Modal
+                isVisible={isProgressShow}
+                animationIn="bounceIn"
+                animationOut="bounceOut"
+                coverScreen={true}
+                hasBackdrop={true}
+                animationInTiming={500}
+                animationOutTiming={500}
+                backdropTransitionInTiming={500}
+                backdropTransitionOutTiming={500}
+                backdropColor={GOBALCOLOR.COLORS.BROWN}
+                backdropOpacity={0.60}
+            >
+                <View style={{ width: '100%', alignItems: 'center', alignSelf: 'center' }}>
+                    <ActivityIndicator size={"large"} color={GOBALCOLOR.COLORS.WHITE} />
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: GOBALCOLOR.COLORS.WHITE, marginTop: 15 }}>Please wait...</Text>
                 </View>
             </Modal>
 
