@@ -6,7 +6,7 @@ import { Toast } from 'native-base';
 
 const SignUpViewController = () => {
     const [showPassword, setShowPassword] = useState(true);
-    const [userName, setUserName] = useState('');
+    //  const [userName, setUserName] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -20,7 +20,9 @@ const SignUpViewController = () => {
     }
 
     const registerUser = async (requestJson) => {
+        console.log("requestJson----->", JSON.stringify(requestJson))
         let apiResponse = await userRegisteration(requestJson);
+        console.log("registerUser apiResponse---->", apiResponse)
         if (apiResponse === true) {
             Toast.show({
                 variant: "solid",
@@ -28,7 +30,7 @@ const SignUpViewController = () => {
                 type: 'success',
                 duration: 6000
             });
-            navigation.navigate('VerifyOtpScreen', { email: email });
+            navigation.navigate('VerifyOtpScreen', { email:requestJson.email  });
         } else {
             Toast.show({
                 variant: "solid",
@@ -44,8 +46,8 @@ const SignUpViewController = () => {
         showPassword,
         setShowPassword,
         goBackScreen,
-        userName,
-        setUserName,
+        // userName,
+        //  setUserName,
         firstName, setFirstName,
         lastName, setLastName,
         email, setEmail,

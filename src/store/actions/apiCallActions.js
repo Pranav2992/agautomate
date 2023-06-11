@@ -15,16 +15,17 @@ export const userLogin = (data) => async dispatch => {
             AsyncStorage.setItem('isLogged', 'true');
             AsyncStorage.setItem('accessToken', 'Token ' + result.data.token);
             AsyncStorage.setItem('userId', (result.data.user.id).toString());
-            return true;
-        } else {
+            return result;
+        }
+        else {
             AsyncStorage.setItem('isLogged', 'false');
             console.log("null callll.....")
-            return false;
+            return result;
         }
     } catch (exception) {
         AsyncStorage.setItem('isLogged', 'false');
         console.log('exception === ', exception);
-        return false;
+        return exception;
     }
 };
 
