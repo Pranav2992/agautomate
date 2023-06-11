@@ -50,7 +50,7 @@ const DashboardScreen = (props) => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const { setAccessToken, setUserId, sendCoordinatesToServer, userId, accessToken } = DashboardController();
+    const { setAccessToken, setUserId, checkCoordinateClockWise, userId, accessToken } = DashboardController();
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -128,8 +128,9 @@ const DashboardScreen = (props) => {
                     <Text style={styles.appBarTitle}>Dashboard</Text>
                 </View>
                 <View style={{ flexDirection: 'row', position: 'absolute', right: 0 }}>
-                    {/*  <Ionicons name="cloud-upload-outline" size={35} style={{ margin: 10, color: '#FFF' }}
-                    /> */}
+                    <Ionicons name="bar-chart-outline" size={35} style={{ margin: 10, color: '#FFF' }}
+                        onPress={() => navigation.navigate("GraphReportScreen")}
+                    />
                     <Ionicons name="person-circle-outline" size={35} style={{ margin: 10, color: '#FFF' }} />
                     <Ionicons name="exit-outline" size={35} style={{ margin: 10, color: '#FFF' }} onPress={() => {
                         Alert.alert('Logout', 'Do you want to logout?', [
@@ -243,7 +244,7 @@ const DashboardScreen = (props) => {
                 </View>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity style={styles.buttonStyle} onPress={() => {
-                        sendCoordinatesToServer(
+                        checkCoordinateClockWise(
                             {
                                 "FarmerId": userId,
                                 "authToken": accessToken,

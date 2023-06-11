@@ -1,12 +1,13 @@
 /* Created By Pranav  */
 
-import { LOGIN_API, USER_REGISTER_API, FORGOT_PASSWORD_API, SEND_COORDINATE_API } from "../types";
+import { LOGIN_API, USER_REGISTER_API, FORGOT_PASSWORD_API, SEND_COORDINATE_API, GET_GRAPH_DATA_API } from "../types";
 
 const initialState = {
     loginResponse: false,
     userRegisterResponse: false,
     forgotPasswordResponse: false,
     sendCoordinatesResponse: null,
+    getGraphDataResponse: []
 }
 
 export default (state = initialState, action) => {
@@ -32,6 +33,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 sendCoordinatesResponse: action.apiResponse,
+            }
+        case GET_GRAPH_DATA_API:
+            return {
+                ...state,
+                getGraphDataResponse: action.apiResponse,
             }
         default:
             return state;

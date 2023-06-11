@@ -1,6 +1,6 @@
 import ENDPOINT from '../../apiservices/apiendpoints';
 import NETWORK from '../../apiservices/apinetworkcall';
-import { LOGIN_API, FORGOT_PASSWORD_API, USER_REGISTER_API, SEND_COORDINATE_API, USER_LOGGED, SHOW_MODAL, SHOW_PROGRESS } from '../types';
+import { LOGIN_API, FORGOT_PASSWORD_API, USER_REGISTER_API, GET_GRAPH_DATA_API, SEND_COORDINATE_API, USER_LOGGED, SHOW_MODAL, SHOW_PROGRESS } from '../types';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import store from '../index'
 
@@ -88,6 +88,21 @@ export const accountActivation = (data) => async dispatch => {
         if (result.status == 200) {
 
             return true;
+        } else {
+            return false;
+        }
+    } catch (exception) {
+        return false;
+    }
+}
+
+export const getGraphData = (userID, month, year, parameterID, data) => async dispatch => {
+    try {
+        let result = await NETWORK(`${ENDPOINT.GET_ANALYTICS_REPORTS_BYFARMERID}/${userID}/${month}/${year}/${parameterID}`, 'GET', data);
+        console.log('getGraphData result ==', result.data);
+        if (result.status == 200) {
+            await dispatch({ type: GET_GRAPH_DATA_API, apiResponse: result.data });
+            return { apiCallSuccess: true, apiResponse: result.data };
         } else {
             return false;
         }

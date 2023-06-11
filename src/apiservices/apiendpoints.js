@@ -5,5 +5,6 @@ export default ENDPOINTS = {
     USER_REGISTER: API_URL + 'register',
     FORGOT_PASSWORD: API_URL + 'User/ForgotPasswordLink',
     SEND_COORDINATE: API_URL + 'coordinate',
-    ACTIVATE_ACCOUNT: API_URL + 'activate'
+    ACTIVATE_ACCOUNT: API_URL + 'activate',
+    GET_ANALYTICS_REPORTS_BYFARMERID: API_URL + 'get-analytics-reports-byFarmerId'
 }

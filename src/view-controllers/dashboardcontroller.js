@@ -11,6 +11,27 @@ const DashboardController = () => {
     const [userId, setUserId] = useState('');
     const { sendCoordinates } = DashboardViewModel();
 
+    const checkCoordinateClockWise = (requestJson) => {
+        var area = 0;
+        for (var i = 0; i < (requestJson.Coordinate.length); i++) {
+            let j = (i + 1) % requestJson.Coordinate.length;
+
+            area += requestJson.Coordinate[i].longitude * requestJson.Coordinate[j].latitude;
+            area -= requestJson.Coordinate[j].longitude * requestJson.Coordinate[i].latitude;
+            console.log(area);
+        }
+        if (area < 0) {
+            sendCoordinatesToServer(requestJson);
+        } else {
+            Toast.show({
+                variant: "solid",
+                text: 'Coordinates should be clockwise. Please clear and reselect it.',
+                type: 'warning',
+                duration: 6000
+            })
+        }
+    }
+
     const sendCoordinatesToServer = async (requestJson) => {
         dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
         let apiResponse = await sendCoordinates(requestJson);
@@ -37,6 +58,7 @@ const DashboardController = () => {
         userId,
         setAccessToken,
         setUserId,
+        checkCoordinateClockWise,
         sendCoordinatesToServer
     }
 }

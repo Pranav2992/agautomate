@@ -9,6 +9,7 @@ import ProfileScreen from '../screens/profile';
 import ForgetPasswordScreen from '../screens/forgetpassword';
 import DashboardScreen from '../screens/dashboard';
 import VerifyOtpScreen from '../screens/verifyotp';
+import GraphReportScreen from '../screens/graphreport';
 
 const Stack = createStackNavigator();
 
@@ -82,6 +83,13 @@ const StackNavigation = (props) => {
                 }}
                 name="VerifyOtpScreen"
                 component={VerifyOtpScreen}
+            />
+            <Stack.Screen
+                options={{
+                    headerShown: null
+                }}
+                name="GraphReportScreen"
+                component={GraphReportScreen}
             />
         </Stack.Navigator>
     );
