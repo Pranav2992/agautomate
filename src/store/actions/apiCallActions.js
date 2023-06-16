@@ -35,13 +35,13 @@ export const userRegisteration = (data) => async dispatch => {
         let result = await NETWORK(ENDPOINT.USER_REGISTER, 'POST', data);
         console.log('userRegisteration result === ', result);
         if (result.status == 200) {
-            return true;
+            return result;
         } else {
-            return false;
+           return result;
         }
     } catch (exception) {
         console.log('exception === ', exception);
-        return false;
+        return exception;
     }
 };
 

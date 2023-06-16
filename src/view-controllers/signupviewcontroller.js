@@ -23,37 +23,45 @@ const SignUpViewController = () => {
         console.log("requestJson----->", JSON.stringify(requestJson))
         let apiResponse = await userRegisteration(requestJson);
         console.log("registerUser apiResponse---->", apiResponse)
-        if (apiResponse === true) {
+        if (apiResponse.status !== undefined && apiResponse.status === 200) {
             Toast.show({
                 variant: "solid",
                 text: 'User register successfully.',
                 type: 'success',
                 duration: 6000
             });
-            navigation.navigate('VerifyOtpScreen', { email:requestJson.email  });
-        } else {
+            navigation.navigate('VerifyOtpScreen', { email: requestJson.email });
+            else if (apiResponse.status === 400) {
             Toast.show({
                 variant: "solid",
-                text: 'Something went wrong. Please try again !.',
+                text: 'User not validated!!',
                 type: 'danger',
                 duration: 6000
             })
         }
+    } else {
+        Toast.show({
+            variant: "solid",
+            text: 'Something went wrong. Please try again !.',
+            type: 'danger',
+            duration: 6000
+        })
+}
     }
 
-    return {
-        registerUser,
-        showPassword,
-        setShowPassword,
-        goBackScreen,
-        // userName,
-        //  setUserName,
-        firstName, setFirstName,
-        lastName, setLastName,
-        email, setEmail,
-        password, setPassword,
-        mobileNumber, setMobileNumber
-    }
+return {
+    registerUser,
+    showPassword,
+    setShowPassword,
+    goBackScreen,
+    // userName,
+    //  setUserName,
+    firstName, setFirstName,
+    lastName, setLastName,
+    email, setEmail,
+    password, setPassword,
+    mobileNumber, setMobileNumber
+}
 
 }
 

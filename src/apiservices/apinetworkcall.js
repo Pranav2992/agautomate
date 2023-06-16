@@ -19,7 +19,7 @@ export default Network = (endpoint, method, body) => {
                             method,
                             url: `${endpoint}`,
                             headers: {
-                                'x-access-token': body.authToken ? body.authToken : null,
+                                'Authorization': body.authToken ? body.authToken : null,
                             },
                             timeout: 5000,
                         }).then(function (response) {
@@ -40,7 +40,7 @@ export default Network = (endpoint, method, body) => {
                             url: `${endpoint}`,
                             headers: {
                                 'Content-Type': 'application/json',
-                                'x-access-token': body?.authToken
+                                'Authorization': body?.authToken
                             },
                             data: body,
                             timeout: 5000,
@@ -49,9 +49,11 @@ export default Network = (endpoint, method, body) => {
                             resolve(response)
                         }
                         ).catch(function (error) {
-                            console.log("post catch error===>", error.response.status)
+                            console.log("error===>", error)
+                            console.log("post catch error===>", error.response.data[0])
                             Toast.show({
-                                text: 'Something went wrong. Please try again !.',
+                                // text: 'Something went wrong. Please try again !.',
+                                text: error.response.data[0],
                                 type: 'danger',
                                 duration: 6000
                             })
