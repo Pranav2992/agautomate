@@ -62,5 +62,12 @@ export default StyleSheet.create({
         color: GOBALCOLORS.COLORS.DARK_BLUE,
         fontSize: 18,
         fontWeight: '500'
-    }
+    },
+    ErrorMessage: {
+        top: 10,
+        color: 'red',
+    },
+    errorMessageContainer: {
+        alignItems: 'center',
+    },
 })

@@ -15,16 +15,17 @@ export const userLogin = (data) => async dispatch => {
             AsyncStorage.setItem('isLogged', 'true');
             AsyncStorage.setItem('accessToken', 'Token ' + result.data.token);
             AsyncStorage.setItem('userId', (result.data.user.id).toString());
-            return true;
-        } else {
+            return result;
+        }
+        else {
             AsyncStorage.setItem('isLogged', 'false');
             console.log("null callll.....")
-            return false;
+            return result;
         }
     } catch (exception) {
         AsyncStorage.setItem('isLogged', 'false');
         console.log('exception === ', exception);
-        return false;
+        return exception;
     }
 };
 
@@ -34,13 +35,13 @@ export const userRegisteration = (data) => async dispatch => {
         let result = await NETWORK(ENDPOINT.USER_REGISTER, 'POST', data);
         console.log('userRegisteration result === ', result);
         if (result.status == 200) {
-            return true;
+            return result;
         } else {
-            return false;
+           return result;
         }
     } catch (exception) {
         console.log('exception === ', exception);
-        return false;
+        return exception;
     }
 };
 

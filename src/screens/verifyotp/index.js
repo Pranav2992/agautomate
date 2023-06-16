@@ -17,7 +17,7 @@ const VerifyOtp = (props) => {
     useEffect(() => {
         /* setStyleObjectVerifyOtp1(styles.inputContainer);
         setStyleObjectVerifyOtp2(styles.inputContainer); */
-        console.log(props.route.params.email)
+        console.log("props.route.params.email:",props.route.params.email)
     })
 
     return (

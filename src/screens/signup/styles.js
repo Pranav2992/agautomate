@@ -57,4 +57,10 @@ export default StyleSheet.create({
         fontSize: 18,
         fontWeight: '400'
     },
+    ErrorMessage: {
+        fontSize: 12,
+        color: 'red',
+        marginTop: 3,
+        textAlign: 'center'
+    },
 });
