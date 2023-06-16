@@ -52,7 +52,7 @@ const SignInScreen = (props) => {
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <View style={styles.optionsContainer}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('SignUpScreen')}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('ProgressScreen')}>
           <Text style={styles.optionsText}>Sign Up</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => props.navigation.navigate('ForgetPasswordScreen')}>

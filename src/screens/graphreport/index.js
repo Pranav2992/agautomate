@@ -46,7 +46,7 @@ const GraphReportScreen = (props) => {
     const { getGraphDataResponse } = useSelector((state) => state.apiCallReducers);
 
     const { open, itemMonths, items, openMonths, options, selectedGraphType, value, valueMonth, accessToken, isDrawGraph,
-        data, labels, setAccessToken, setItemMonths, setItems, setUserId, setGetGraphDataResponse,
+        data, labels, setAccessToken, setItemMonths, setItems, setUserId, setGetGraphDataResponse, goBackScreen,
         setOpen, setOpenMonths, setSelectedGraphType, setValue, setValueMonth, checkSelectedMonth, getGraphDataFromServer } = GraphReportController();
 
     useEffect(() => {
@@ -61,7 +61,7 @@ const GraphReportScreen = (props) => {
         <View style={styles.mainContainer}>
             <View style={styles.appBarContainer}>
                 <View style={{ flexDirection: 'row', position: 'absolute', left: 5 }}>
-                    <Ionicons name="arrow-back" size={35} style={{ margin: 10, color: '#FFF' }} /* onPress={() => goBackScreen()} */ />
+                    <Ionicons name="arrow-back" size={35} style={{ margin: 10, color: '#FFF' }} onPress={() => goBackScreen()} />
                 </View>
                 <View style={{ marginLeft: 70 }}>
                     <Text style={styles.appBarTitle}>Graphical Report</Text>
@@ -152,8 +152,8 @@ const GraphReportScreen = (props) => {
                                     width={600} // from react-native
                                     height={300}
                                     fromZero={true}
-                                   /*  yAxisLabel="$"
-                                    yAxisSuffix="k" */
+                                    /*  yAxisLabel="$"
+                                     yAxisSuffix="k" */
                                     yAxisInterval={1} // optional, defaults to 1
                                     chartConfig={{
                                         backgroundColor: "#e26a00",

@@ -24,6 +24,7 @@ const GraphReportController = () => {
     const [userId, setUserId] = useState('');
     const [getGraphDataResponse, setGetGraphDataResponse] = useState([]);
     const [accessToken, setAccessToken] = useState('');
+    const navigation = useNavigation();
     const [itemMonths, setItemMonths] = useState([
         {
             label: 'January', value: '1'
@@ -65,7 +66,9 @@ const GraphReportController = () => {
 
     const { getGraphData } = GraphReportViewModel();
 
-
+    const goBackScreen = () => {
+        navigation.goBack();
+    }
 
     const checkSelectedMonth = (monthValue) => {
         var date = new Date();
@@ -187,6 +190,7 @@ const GraphReportController = () => {
         setAccessToken,
         setIsDrawGraph,
         setUserId,
+        goBackScreen,
         setGetGraphDataResponse,
         getGraphDataFromServer
     }
