@@ -4,7 +4,7 @@ import styles from "./styles";
 import { TextInput } from 'react-native-paper';
 import GOBALCOLOR from '../../gobalconstant/colors';
 import ForgotPasswordViewController from "../../view-controllers/forgotpasswordcontroller";
-
+import ProgressScreen from '../highordercomponents/progressscreen';
 const ForgetPasswordScreen = (props) => {
   const { forgotPasswordController } = ForgotPasswordViewController();
   const [email, setEmail] = useState('');
@@ -31,6 +31,7 @@ const ForgetPasswordScreen = (props) => {
       })} >
         <Text style={styles.buttonText}>Forgot Password?</Text>
       </TouchableOpacity>
+      <ProgressScreen />
     </View>
   )
 };

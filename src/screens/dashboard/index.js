@@ -41,7 +41,7 @@ import Geocoder from "react-native-geocoder";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DashboardController from "../../view-controllers/dashboardcontroller";
 import { ScrollView } from "react-native-gesture-handler";
-
+import ProgressScreen from '../highordercomponents/progressscreen';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -284,7 +284,7 @@ const DashboardScreen = (props) => {
                 </View>
             </Modal>
 
-            <Modal
+            {/* <Modal
                 isVisible={isProgressShow}
                 animationIn="bounceIn"
                 animationOut="bounceOut"
@@ -301,8 +301,8 @@ const DashboardScreen = (props) => {
                     <ActivityIndicator size={"large"} color={GOBALCOLOR.COLORS.WHITE} />
                     <Text style={{ fontSize: 16, fontWeight: 'bold', color: GOBALCOLOR.COLORS.WHITE, marginTop: 15 }}>Please wait...</Text>
                 </View>
-            </Modal>
-
+            </Modal> */}
+            <ProgressScreen />
         </View >
     )
 };

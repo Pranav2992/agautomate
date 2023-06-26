@@ -8,7 +8,7 @@ import SignUpViewController from "../../view-controllers/signupviewcontroller";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import validationSchema from './formValidation';
-
+import ProgressScreen from '../highordercomponents/progressscreen';
 const SignUpScreen = (props) => {
 
   const {
@@ -192,6 +192,7 @@ const SignUpScreen = (props) => {
             </View>
           )}
         </Formik>
+        <ProgressScreen />
       </View >
     </KeyboardAwareScrollView>
   )

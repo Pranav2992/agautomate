@@ -4,8 +4,9 @@ import { Toast } from 'native-base';
 import { useDispatch, useSelector, connect } from 'react-redux';
 import moment from 'moment/moment';
 import GraphReportViewModel from '../view-models/graphreportviewmodel';
-
+import { SHOW_PROGRESS } from '../store/types';
 const GraphReportController = () => {
+    const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [items, setItems] = useState([
@@ -104,6 +105,7 @@ const GraphReportController = () => {
     }
 
     const getGraphDataFromServer = async (requestJson) => {
+        dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
         let apiResponseObject = await getGraphData(userId, valueMonth, valueYear, value, requestJson);
         let garphData = [];
 

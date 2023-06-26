@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import LoginViewModel from '../view-models/loginViewModal';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Toast } from 'native-base';
-
+import { SHOW_PROGRESS } from '../store/types';
 
 const LoginViewController = () => {
+    const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(true);
     const navigation = useNavigation();
     const { userLogin } = LoginViewModel();
 
     const LoginUser = async (requestJson) => {
-        console.log("LoginUser requestJson----->",requestJson )
+        dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
+        console.log("LoginUser requestJson----->", requestJson)
         let apiResponse = await userLogin(requestJson);
         console.log("apiResponse login controller--------->", apiResponse)
         console.log("400 reponce--->", apiResponse.status)

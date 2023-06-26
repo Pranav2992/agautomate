@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import SignUpViewModel from '../view-models/signupviewmodel';
 import { Snackbar } from 'react-native-paper';
+import { useSelector, useDispatch } from 'react-redux';
 import { Toast } from 'native-base';
+import { SHOW_PROGRESS } from '../store/types';
 
 const SignUpViewController = () => {
+    const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(true);
     //  const [userName, setUserName] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -20,6 +23,7 @@ const SignUpViewController = () => {
     }
 
     const registerUser = async (requestJson) => {
+        dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
         console.log("requestJson----->", JSON.stringify(requestJson))
         let apiResponse = await userRegisteration(requestJson);
         console.log("registerUser apiResponse---->", apiResponse)

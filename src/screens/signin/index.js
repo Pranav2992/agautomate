@@ -9,6 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { validationSchema, validationSchemaRecover, validationSchemaUpdatePassword } from './formValidation';
 import * as Yup from 'yup';
+import ProgressScreen from '../highordercomponents/progressscreen';
 
 const SignInScreen = (props) => {
 
@@ -109,6 +110,7 @@ const SignInScreen = (props) => {
               <Text style={styles.optionsText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
+          <ProgressScreen />
         </View>
       )}
     </Formik>

@@ -12,6 +12,7 @@ export const userLogin = (data) => async dispatch => {
         if (result.status == 200) {
             dispatch({ type: LOGIN_API, apiResponse: true });
             dispatch({ type: USER_LOGGED, userLogged: true });
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             AsyncStorage.setItem('isLogged', 'true');
             AsyncStorage.setItem('accessToken', 'Token ' + result.data.token);
             AsyncStorage.setItem('userId', (result.data.user.id).toString());
@@ -35,12 +36,15 @@ export const userRegisteration = (data) => async dispatch => {
         let result = await NETWORK(ENDPOINT.USER_REGISTER, 'POST', data);
         console.log('userRegisteration result === ', result);
         if (result.status == 200) {
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             return result;
         } else {
-           return result;
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
+            return result;
         }
     } catch (exception) {
         console.log('exception === ', exception);
+        await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
         return exception;
     }
 };
@@ -51,12 +55,15 @@ export const forgotPassword = (data) => async dispatch => {
         let result = await NETWORK(ENDPOINT.FORGOT_PASSWORD, 'POST', data);
         console.log('userLogin result === ', result);
         if (result.status == 200) {
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             return true;
         } else {
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             return false;
         }
     } catch (exception) {
         console.log('exception === ', exception);
+        await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
         return false;
     }
 };
@@ -87,12 +94,14 @@ export const accountActivation = (data) => async dispatch => {
         let result = await NETWORK(ENDPOINT.ACTIVATE_ACCOUNT, 'POST', data);
         console.log('accountActivation result ==', result.data);
         if (result.status == 200) {
-
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             return true;
         } else {
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             return false;
         }
     } catch (exception) {
+        await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
         return false;
     }
 }
@@ -103,11 +112,14 @@ export const getGraphData = (userID, month, year, parameterID, data) => async di
         console.log('getGraphData result ==', result.data);
         if (result.status == 200) {
             await dispatch({ type: GET_GRAPH_DATA_API, apiResponse: result.data });
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             return { apiCallSuccess: true, apiResponse: result.data };
         } else {
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
             return false;
         }
     } catch (exception) {
+        await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
         return false;
     }
 }

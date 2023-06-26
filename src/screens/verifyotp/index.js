@@ -5,7 +5,7 @@ import { TextInput } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import GOBALCOLOR from '../../gobalconstant/colors';
 import OTPVerificationController from "../../view-controllers/otpverificationcontroller";
-
+import ProgressScreen from '../highordercomponents/progressscreen';
 const VerifyOtp = (props) => {
 
     const otpRef1 = useRef(null);
@@ -17,7 +17,7 @@ const VerifyOtp = (props) => {
     useEffect(() => {
         /* setStyleObjectVerifyOtp1(styles.inputContainer);
         setStyleObjectVerifyOtp2(styles.inputContainer); */
-        console.log("props.route.params.email:",props.route.params.email)
+        console.log("props.route.params.email:", props.route.params.email)
     })
 
     return (
@@ -133,7 +133,7 @@ const VerifyOtp = (props) => {
                     <Text style={styles.buttonText}>OTP Verification</Text>
                 </TouchableOpacity>
             </View>
-
+            <ProgressScreen />
         </View>
     )
 };

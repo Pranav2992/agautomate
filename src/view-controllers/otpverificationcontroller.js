@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Toast } from 'native-base';
 import OTPVerificationViewModel from '../view-models/otpverficationviewmodel';
+import { SHOW_PROGRESS } from '../store/types';
+import { useSelector, useDispatch } from 'react-redux';
 
 const OTPVerificationController = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const [otp1, setOtp1] = useState('');
     const [otp2, setOtp2] = useState('');
@@ -18,6 +21,7 @@ const OTPVerificationController = () => {
     }
 
     const activationAccount = async (requestJson) => {
+        dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
         let apiResponse = await accountActivation(requestJson);
         if (apiResponse === true) {
             Toast.show({

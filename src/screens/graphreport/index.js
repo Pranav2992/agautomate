@@ -10,6 +10,7 @@ import ArrowIcon from 'react-native-vector-icons/MaterialIcons';
 import GraphReportController from "../../view-controllers/graphreportcontroller";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, connect } from "react-redux";
+import ProgressScreen from '../highordercomponents/progressscreen';
 const width = Dimensions.get('window').width;
 import {
     LineChart,
@@ -234,6 +235,7 @@ const GraphReportScreen = (props) => {
 
                 {/*  </View> */}
             </ScrollView>
+            <ProgressScreen />
         </View>
     )
 };

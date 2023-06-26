@@ -8,12 +8,13 @@ import Animated, {
 } from 'react-native-reanimated';
 import GOBALCOLOR from '../../gobalconstant/colors';
 import Modal from "react-native-modal";
+import { connect, useSelector } from "react-redux";
 
 const ProgressScreen = (props) => {
 
     const [counter, setCounter] = useState(1);
     const MAX_DOTS = 3;
-
+    const { isShowModal, isProgressShow } = useSelector((state) => state.appReducers);
     useEffect(() => {
         const intervalID = setInterval(() => {
             setCounter((counter % MAX_DOTS) + 1);
@@ -41,7 +42,7 @@ const ProgressScreen = (props) => {
 
     return (
         <Modal
-            isVisible={true}
+            isVisible={isProgressShow}
             animationIn="slideInRight"
             animationOut="slideOutLeft"
             swipeDirection="right"
@@ -65,7 +66,7 @@ const ProgressScreen = (props) => {
     )
 };
 
-export default ProgressScreen;
+export default connect(null, null)(ProgressScreen);
 
 const styles = StyleSheet.create({
     glowContainer: {
