@@ -54,6 +54,14 @@ const SignInScreen = (props) => {
               underlineColor={GOBALCOLOR.COLORS.BROWN}
             />
           </View>
+          <View style={styles.errorMessageContainer}>
+            {errors.email &&
+              touched.email ? (
+              <Text style={styles.ErrorMessage}>
+                {errors.email + ' *'}
+              </Text>
+            ) : null}
+          </View>
           <View style={[styles.inputContainer, { marginTop: 20 }]}>
             <TextInput
               mode="flat"
@@ -74,6 +82,14 @@ const SignInScreen = (props) => {
               underlineColor={GOBALCOLOR.COLORS.BROWN}
             />
           </View>
+          <View style={styles.errorMessageContainer}>
+            {errors.password &&
+              touched.password ? (
+              <Text style={styles.ErrorMessage}>
+                {errors.password + ' *'}
+              </Text>
+            ) : null}
+          </View>
           <TouchableOpacity style={styles.buttonStyle}
             disabled={!isValid || !values.email || !values.password}
             onPress={
@@ -86,22 +102,6 @@ const SignInScreen = (props) => {
           >
             <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
-          <View style={styles.errorMessageContainer}>
-            {errors.email &&
-              touched.email ? (
-              <Text style={styles.ErrorMessage}>
-                {errors.email + ' *'}
-              </Text>
-            ) : null}
-          </View>
-          <View style={styles.errorMessageContainer}>
-            {errors.password &&
-              touched.password ? (
-              <Text style={styles.ErrorMessage}>
-                {errors.password + ' *'}
-              </Text>
-            ) : null}
-          </View>
           <View style={styles.optionsContainer}>
             <TouchableOpacity onPress={() => props.navigation.navigate('SignUpScreen')}>
               <Text style={styles.optionsText}>Sign Up</Text>

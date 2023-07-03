@@ -23,7 +23,7 @@ const SignUpScreen = (props) => {
   } = SignUpViewController();
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView style={styles.mainContainer}>
       <View style={styles.mainContainer}>
         <View style={styles.appBarContainer}>
           <View style={{ flexDirection: 'row', position: 'absolute', left: 5 }}>
@@ -85,6 +85,13 @@ const SignUpScreen = (props) => {
                   underlineColor={GOBALCOLOR.COLORS.BROWN}
                 />
               </View>
+              <View>
+                {errors.firstName && touched.firstName ? (
+                  <Text style={styles.ErrorMessage}>
+                    {errors.firstName + ' *'}
+                  </Text>
+                ) : null}
+              </View>
               <View style={[styles.inputContainer, { marginTop: 10 }]}>
                 <TextInput
                   mode="flat"
@@ -101,6 +108,13 @@ const SignUpScreen = (props) => {
                   underlineColor={GOBALCOLOR.COLORS.BROWN}
                 />
               </View>
+              <View>
+                {errors.lastName && touched.lastName ? (
+                  <Text style={styles.ErrorMessage}>
+                    {errors.lastName + ' *'}
+                  </Text>
+                ) : null}
+              </View>
               <View style={[styles.inputContainer, { marginTop: 10 }]}>
                 <TextInput
                   mode="flat"
@@ -116,6 +130,13 @@ const SignUpScreen = (props) => {
                   activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                   underlineColor={GOBALCOLOR.COLORS.BROWN}
                 />
+              </View>
+              <View>
+                {errors.email && touched.email ? (
+                  <Text style={styles.ErrorMessage}>
+                    {errors.email + ' *'}
+                  </Text>
+                ) : null}
               </View>
               <View style={[styles.inputContainer, { marginTop: 10 }]}>
                 <TextInput
@@ -135,6 +156,13 @@ const SignUpScreen = (props) => {
                   underlineColor={GOBALCOLOR.COLORS.BROWN}
                 />
               </View>
+              <View>
+                {errors.password && touched.password ? (
+                  <Text style={styles.ErrorMessage}>
+                    {errors.password + ' *'}
+                  </Text>
+                ) : null}
+              </View>
               <View style={[styles.inputContainer, { marginTop: 10 }]}>
                 <TextInput
                   mode="flat"
@@ -152,26 +180,6 @@ const SignUpScreen = (props) => {
                 />
               </View>
               <View>
-                {errors.firstName && touched.firstName ? (
-                  <Text style={styles.ErrorMessage}>
-                    {errors.firstName + ' *'}
-                  </Text>
-                ) : null}
-                {errors.lastName && touched.lastName ? (
-                  <Text style={styles.ErrorMessage}>
-                    {errors.lastName + ' *'}
-                  </Text>
-                ) : null}
-                {errors.email && touched.email ? (
-                  <Text style={styles.ErrorMessage}>
-                    {errors.email + ' *'}
-                  </Text>
-                ) : null}
-                {errors.password && touched.password ? (
-                  <Text style={styles.ErrorMessage}>
-                    {errors.password + ' *'}
-                  </Text>
-                ) : null}
                 {errors.mobileNumber && touched.mobileNumber ? (
                   <Text style={styles.ErrorMessage}>
                     {errors.mobileNumber + ' *'}

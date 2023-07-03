@@ -168,6 +168,7 @@ const DashboardScreen = (props) => {
                     </View>
                     <View style={[styles.inputContainer, { marginTop: 10 }]}>
                         <DropDownPicker
+                            placeholder="Select Parameter"
                             style={styles.inputDropdown}
                             open={open}
                             value={value}

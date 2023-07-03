@@ -105,65 +105,99 @@ const GraphReportController = () => {
     }
 
     const getGraphDataFromServer = async (requestJson) => {
-        dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
-        let apiResponseObject = await getGraphData(userId, valueMonth, valueYear, value, requestJson);
-        let garphData = [];
+        console.log("getGraphDataFromServer--->", JSON.stringify(requestJson))
+        console.log("userId--->", userId)
+        console.log("valueMonth--->", valueMonth)
+        console.log("valueYear--->", valueYear)
+        console.log("value--->", value)
+        if (valueMonth !== null && valueYear !== null && value !== null) {
 
-        if (apiResponseObject.apiCallSuccess === true) {
+            dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
+            let apiResponseObject = await getGraphData(userId, valueMonth, valueYear, value, requestJson);
+            let garphData = [];
+            if (apiResponseObject.apiCallSuccess === true) {
 
-            if (apiResponseObject.apiResponse.length > 0) {
-                console.log('getGraphDataResponse === ', apiResponseObject.apiResponse);
+                if (apiResponseObject.apiResponse.length > 0) {
+                    console.log('getGraphDataResponse === ', apiResponseObject.apiResponse);
 
-                for (let data = 0; data < apiResponseObject.apiResponse.length; data++) {
-                    for (let label = 0; label < labels.length; label++) {
-                        console.log('data === ', data)
-                        try {
-                            /* if (apiResponseObject.apiResponse[data].ReportDate === undefined) {
-                                garphData.push(0);
-                            } else { */
-                            let date = moment(apiResponseObject.apiResponse[data].ReportDate).format('DD');
-                            console.log('date ==', date);
-                            console.log('labels = ', labels);
-                            if (date === labels[label]) {
-                                garphData.push(parseFloat(apiResponseObject.apiResponse[data].ParameterValue).toFixed(2));
-                            } else {
+                    for (let data = 0; data < apiResponseObject.apiResponse.length; data++) {
+                        for (let label = 0; label < labels.length; label++) {
+                            console.log('data === ', data)
+                            try {
+                                /* if (apiResponseObject.apiResponse[data].ReportDate === undefined) {
+                                    garphData.push(0);
+                                } else { */
+                                let date = moment(apiResponseObject.apiResponse[data].ReportDate).format('DD');
+                                console.log('date ==', date);
+                                console.log('labels = ', labels);
+                                if (date === labels[label]) {
+                                    garphData.push(parseFloat(apiResponseObject.apiResponse[data].ParameterValue).toFixed(2));
+                                } else {
+                                    garphData.push(0);
+                                }
+                                /*  } */
+                            } catch (error) {
+                                console.log('error = ', error);
                                 garphData.push(0);
                             }
-                            /*  } */
-                        } catch (error) {
-                            console.log('error = ', error);
-                            garphData.push(0);
                         }
                     }
+
+                    console.log('graphData == ', garphData);
+                    setData([{
+                        data: garphData
+                    }]);
+                    setIsDrawGraph(true);
+                } else {
+                    setIsDrawGraph(false);
+                    Toast.show({
+                        variant: "solid",
+                        text: 'Data not found.',
+                        type: 'danger',
+                        duration: 6000
+                    });
                 }
 
-                console.log('graphData == ', garphData);
-                setData([{
-                    data: garphData
-                }]);
-                setIsDrawGraph(true);
-            } else {
+            }
+            else {
                 setIsDrawGraph(false);
                 Toast.show({
                     variant: "solid",
-                    text: 'Data not found.',
-                    type: 'warning',
+                    text: 'Something went wrong. Please try again !.',
+                    type: 'danger',
                     duration: 6000
                 });
             }
-
         }
-        else {
+        else if (valueMonth === null && valueYear === null && value !== null) {
             setIsDrawGraph(false);
             Toast.show({
                 variant: "solid",
-                text: 'Something went wrong. Please try again !.',
+                text: 'Please Select Month',
+                type: 'danger',
+                duration: 6000
+            });
+        }
+        else if (valueMonth !== null && valueYear !== null && value === null) {
+            setIsDrawGraph(false);
+            Toast.show({
+                variant: "solid",
+                text: 'Please Select Parameter',
+                type: 'danger',
+                duration: 6000
+            });
+        }
+        else {
+            console.log("Please Select Month and Parameter")
+            setIsDrawGraph(false);
+            Toast.show({
+                variant: "solid",
+                text: 'Please Select Month and Parameter',
                 type: 'danger',
                 duration: 6000
             });
         }
     }
-
 
     return {
         open,

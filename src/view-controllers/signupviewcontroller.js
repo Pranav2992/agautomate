@@ -27,6 +27,7 @@ const SignUpViewController = () => {
         console.log("requestJson----->", JSON.stringify(requestJson))
         let apiResponse = await userRegisteration(requestJson);
         console.log("registerUser apiResponse---->", apiResponse)
+        console.log("registerUser apiResponse message---->", apiResponse.status)
         if (apiResponse.status !== undefined && apiResponse.status === 200) {
             Toast.show({
                 variant: "solid",
@@ -36,10 +37,10 @@ const SignUpViewController = () => {
             });
             navigation.navigate('VerifyOtpScreen', { email: requestJson.email });
         }
-        else if (apiResponse.status === 400) {
+        else if (apiResponse.response.status !== undefined && apiResponse.response.status === 400) {
             Toast.show({
                 variant: "solid",
-                text: 'User not validated!!',
+                text: typeof apiResponse.response.data.non_field_errors === 'undefined' ? apiResponse.response.data[0] : apiResponse.response.data.non_field_errors[0],
                 type: 'danger',
                 duration: 6000
             })

@@ -11,36 +11,36 @@ const SplashScreen = (props) => {
     const { userLogged } = useSelector((state) => state.appReducers)
     const [hidden, setHidden] = useState(false);
 
-    /*  useEffect(() => {
-         console.log('splash screen use effect called ', userLogged)
-         setTimeout(() => {
- 
-             AsyncStorage.getItem('isLogged').then((result) => {
-                 if (result === 'true') {
-                     props.navigation.navigate('DashboardScreen');
-                 } else {
-                     props.navigation.navigate('SignInScreen');
-                 }
-             });
- 
-         }, 2000);
-     }, [userLogged]); */
+    useEffect(() => {
+        console.log('splash screen use effect called ', userLogged)
+        setTimeout(() => {
 
-    /*   useFocusEffect(
-          useCallback(() => {
-              setTimeout(() => {
-  
-                  AsyncStorage.getItem('isLogged').then((result) => {
-                      if (result === 'true') {
-                          props.navigation.navigate('DashboardScreen');
-                      } else {
-                          props.navigation.navigate('SignInScreen');
-                      }
-                  });
-  
-              }, 2000);
-          }, [userLogged])
-      ) */
+            AsyncStorage.getItem('isLogged').then((result) => {
+                if (result === 'true') {
+                    props.navigation.navigate('DashboardScreen');
+                } else {
+                    props.navigation.navigate('SignInScreen');
+                }
+            });
+
+        }, 2000);
+    }, [userLogged]);
+
+    useFocusEffect(
+        useCallback(() => {
+            setTimeout(() => {
+
+                AsyncStorage.getItem('isLogged').then((result) => {
+                    if (result === 'true') {
+                        props.navigation.navigate('DashboardScreen');
+                    } else {
+                        props.navigation.navigate('SignInScreen');
+                    }
+                });
+
+            }, 2000);
+        }, [userLogged])
+    )
 
     return (
         <View style={styles.mainContainer}>

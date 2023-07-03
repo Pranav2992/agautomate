@@ -12,21 +12,50 @@ const DashboardController = () => {
     const { sendCoordinates } = DashboardViewModel();
 
     const checkCoordinateClockWise = (requestJson) => {
+        console.log("checkCoordinateClockWise requestJson", requestJson)
+
         var area = 0;
         for (var i = 0; i < (requestJson.Coordinate.length); i++) {
             let j = (i + 1) % requestJson.Coordinate.length;
 
             area += requestJson.Coordinate[i].longitude * requestJson.Coordinate[j].latitude;
             area -= requestJson.Coordinate[j].longitude * requestJson.Coordinate[i].latitude;
-            console.log(area);
+            console.log("area----->", area);
         }
-        if (area < 0) {
+        console.log("checkCoordinateClockWise requestJson ParameterId", requestJson.ParameterId)
+        console.log("area", area)
+        if (area < 0 && requestJson.ParameterId !== null) {
             sendCoordinatesToServer(requestJson);
-        } else {
+        }
+        else if (requestJson.ParameterId === null && area < 0) {
+            Toast.show({
+                variant: "solid",
+                text: 'Please Select Parameter',
+                type: 'danger',
+                duration: 6000
+            })
+        }
+        else if (requestJson.ParameterId !== null && area === 0) {
+            Toast.show({
+                variant: "solid",
+                text: 'Please Select Coordinates',
+                type: 'danger',
+                duration: 6000
+            })
+        }
+        else if (requestJson.ParameterId === null && area === 0) {
+            Toast.show({
+                variant: "solid",
+                text: 'Please Select Parameter and clockwise Coordinates',
+                type: 'danger',
+                duration: 6000
+            })
+        }
+        else {
             Toast.show({
                 variant: "solid",
                 text: 'Coordinates should be clockwise. Please clear and reselect it.',
-                type: 'warning',
+                type: 'danger',
                 duration: 6000
             })
         }
@@ -35,7 +64,8 @@ const DashboardController = () => {
     const sendCoordinatesToServer = async (requestJson) => {
         dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
         let apiResponse = await sendCoordinates(requestJson);
-        if (apiResponse === true) {
+        console.log("sendCoordinatesToServer apiResponse", JSON.stringify(apiResponse))
+        if (apiResponse.status === 200 && apiResponse.status !== undefined) {
             Toast.show({
                 variant: "solid",
                 text: 'Send Coordinates successfully.',

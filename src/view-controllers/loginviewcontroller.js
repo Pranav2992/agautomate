@@ -16,8 +16,8 @@ const LoginViewController = () => {
         console.log("LoginUser requestJson----->", requestJson)
         let apiResponse = await userLogin(requestJson);
         console.log("apiResponse login controller--------->", apiResponse)
-        console.log("400 reponce--->", apiResponse.status)
-        if (apiResponse.status !== undefined && apiResponse.status === 200) {
+        console.log("400 reponce--->", apiResponse.response.status)
+        if (apiResponse.response.status !== undefined && apiResponse.response.status === 200) {
             Toast.show({
                 variant: "solid",
                 text: 'User login successfully.',
@@ -26,10 +26,11 @@ const LoginViewController = () => {
             });
             navigation.navigate("DashboardScreen");
         }
-        else if (apiResponse.status === 400) {
+        else if (apiResponse.response.status !== undefined && apiResponse.response.status === 400) {
+            console.log("apiResponse.response.data--", apiResponse.response)
             Toast.show({
                 variant: "solid",
-                text: 'User not validated!!',
+                text: typeof apiResponse.response.data.non_field_errors === 'undefined' ? apiResponse.response.data[0] : apiResponse.response.data.non_field_errors[0],
                 type: 'danger',
                 duration: 6000
             })
@@ -37,7 +38,7 @@ const LoginViewController = () => {
         else {
             Toast.show({
                 variant: "solid",
-                text: 'Please check your internet connection !.',
+                text: 'Something went wrong,Please Try again!',
                 type: 'danger',
                 duration: 6000
             })
