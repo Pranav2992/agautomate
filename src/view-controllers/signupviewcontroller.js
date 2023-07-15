@@ -9,13 +9,17 @@ import { SHOW_PROGRESS } from '../store/types';
 const SignUpViewController = () => {
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(true);
+    const [showCnfPassword, setCnfShowPassword] = useState(true);
     //  const [userName, setUserName] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
+    const [cnfPassword, setCnfPassword] = useState('');
+    const [firmType, setFirmType] = useState('individual');
     const navigation = useNavigation();
+
     const { userRegisteration } = SignUpViewModel();
 
     const goBackScreen = () => {
@@ -65,7 +69,8 @@ const SignUpViewController = () => {
         lastName, setLastName,
         email, setEmail,
         password, setPassword,
-        mobileNumber, setMobileNumber
+        mobileNumber, setMobileNumber,
+        cnfPassword, setCnfPassword,
     }
 
 }
