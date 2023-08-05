@@ -26,6 +26,8 @@ const GraphReportController = () => {
     const [getGraphDataResponse, setGetGraphDataResponse] = useState([]);
     const [accessToken, setAccessToken] = useState('');
     const navigation = useNavigation();
+    const [openFarmList, setOpenFarmList] = useState(false);
+    const [valueFarmList, setValuefarmList] = useState(null);
     const [itemMonths, setItemMonths] = useState([
         {
             label: 'January', value: '1'
@@ -110,10 +112,10 @@ const GraphReportController = () => {
         console.log("valueMonth--->", valueMonth)
         console.log("valueYear--->", valueYear)
         console.log("value--->", value)
-        if (valueMonth !== null && valueYear !== null && value !== null) {
+        if (valueMonth !== null && valueYear !== null && value !== null && valueFarmList !== null) {
 
             dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
-            let apiResponseObject = await getGraphData(userId, valueMonth, valueYear, value, requestJson);
+            let apiResponseObject = await getGraphData(userId, valueMonth, valueYear, value, valueFarmList, requestJson);
             let garphData = [];
             if (apiResponseObject.apiCallSuccess === true) {
 
@@ -186,6 +188,13 @@ const GraphReportController = () => {
                 type: 'danger',
                 duration: 6000
             });
+        } else if (valueFarmList === null) {
+            Toast.show({
+                variant: "solid",
+                text: 'Please Select Farm',
+                type: 'danger',
+                duration: 6000
+            });
         }
         else {
             console.log("Please Select Month and Parameter")
@@ -213,6 +222,10 @@ const GraphReportController = () => {
         labels,
         data,
         getGraphDataResponse,
+        openFarmList,
+        valueFarmList,
+        setOpenFarmList,
+        setValuefarmList,
         setData,
         setLabels,
         setOpen,

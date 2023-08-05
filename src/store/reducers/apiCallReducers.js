@@ -1,13 +1,15 @@
 /* Created By Pranav  */
 
-import { LOGIN_API, USER_REGISTER_API, FORGOT_PASSWORD_API, SEND_COORDINATE_API, GET_GRAPH_DATA_API } from "../types";
+import { LOGIN_API, ADD_FARM_API, USER_REGISTER_API, FORGOT_PASSWORD_API, SEND_COORDINATE_API, GET_GRAPH_DATA_API, GET_ALL_FARM_API } from "../types";
 
 const initialState = {
     loginResponse: false,
     userRegisterResponse: false,
     forgotPasswordResponse: false,
     sendCoordinatesResponse: null,
-    getGraphDataResponse: []
+    addFarmResponse: null,
+    getGraphDataResponse: [],
+    farmList: []
 }
 
 export default (state = initialState, action) => {
@@ -38,6 +40,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 getGraphDataResponse: action.apiResponse,
+            }
+        case ADD_FARM_API:
+            return {
+                ...state,
+                addFarmResponse: action.apiResponse,
+            }
+        case GET_ALL_FARM_API:
+            return {
+                ...state,
+                farmList: action.apiResponse,
             }
         default:
             return state;

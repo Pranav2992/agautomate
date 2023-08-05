@@ -62,6 +62,8 @@ const SignUpViewController = () => {
         registerUser,
         showPassword,
         setShowPassword,
+        showCnfPassword,
+        setCnfShowPassword,
         goBackScreen,
         // userName,
         //  setUserName,

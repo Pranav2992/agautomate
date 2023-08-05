@@ -24,7 +24,7 @@ export default Network = (endpoint, method, body) => {
                             },
                             timeout: 5000,
                         }).then(function (response) {
-                            console.log("get resopnce===>", resolve)
+                            //console.log("get resopnce===>", resolve)
                             resolve(response)
                         }).catch(function (error) {
                             console.log("get catch error===>", error)
@@ -49,12 +49,12 @@ export default Network = (endpoint, method, body) => {
                             timeout: 5000,
                         }).then(function (response) {
                             store.dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
-                            console.log("post resopnce===>", response)
+                            //console.log("post resopnce===>", response)
                             resolve(response)
                         }
                         ).catch(function (error) {
                             console.log("error===>", error)
-                            console.log("post catch error===>", typeof error.response.data.non_field_errors === 'undefined')
+                           /// console.log("post catch error===>", typeof error.response.data.non_field_errors === 'undefined')
                             store.dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
                             Toast.show({
                                 text: typeof error.response.data.non_field_errors === 'undefined' ? error.response.data[0] : error.response.data.non_field_errors[0],

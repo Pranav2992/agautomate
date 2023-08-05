@@ -7,7 +7,7 @@ import GOBALCOLOR from '../../gobalconstant/colors';
 import SignUpViewController from "../../view-controllers/signupviewcontroller";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import validationSchema from './formValidation';
+import { validationSchemaForCompany, validationSchemaForIndividual } from './formValidation';
 import ProgressScreen from '../highordercomponents/progressscreen';
 import { value } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
 const SignUpScreen = (props) => {
@@ -51,7 +51,7 @@ const SignUpScreen = (props) => {
             password: '',
             cnfPassword: '',
           }}
-          validationSchema={validationSchema}
+          validationSchema={checked === 'individual' ? validationSchemaForIndividual : validationSchemaForCompany}
           onSubmit={registerUser}>
           {({
             handleChange,
@@ -333,7 +333,8 @@ const SignUpScreen = (props) => {
                 <TextInput
                   mode="flat"
                   label="Password"
-                  secureTextEntry={values.showPassword}
+                  secureTextEntry={showPassword}
+
                   style={styles.input}
                   value={values.password}
                   keyboardType="default"
@@ -342,7 +343,7 @@ const SignUpScreen = (props) => {
                   // }}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
-                  right={<TextInput.Icon icon="eye" iconColor={GOBALCOLOR.COLORS.BROWN} style={{ marginTop: 10 }} onPress={() => setShowPassword(!showPassword)} />}
+                  right={<TextInput.Icon icon="eye" forceTextInputFocus={false} iconColor={GOBALCOLOR.COLORS.BROWN} style={{ marginTop: 10 }} onPress={() => setShowPassword(!showPassword)} />}
                   activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                   underlineColor={GOBALCOLOR.COLORS.BROWN}
                 />
@@ -358,7 +359,7 @@ const SignUpScreen = (props) => {
                 <TextInput
                   mode="flat"
                   label="Confirm Password"
-                  secureTextEntry={values.showPassword}
+                  secureTextEntry={showCnfPassword}
                   style={styles.input}
                   value={values.cnfPassword}
                   keyboardType="default"
@@ -367,7 +368,7 @@ const SignUpScreen = (props) => {
                   // }}
                   onChangeText={handleChange('cnfPassword')}
                   onBlur={handleBlur('cnfPassword')}
-                  right={<TextInput.Icon icon="eye" iconColor={GOBALCOLOR.COLORS.BROWN} style={{ marginTop: 10 }} onPress={() => setCnfShowPassword(!showCnfPassword)} />}
+                  right={<TextInput.Icon icon="eye" forceTextInputFocus={false} iconColor={GOBALCOLOR.COLORS.BROWN} style={{ marginTop: 10 }} onPress={() => setCnfShowPassword(!showCnfPassword)} />}
                   activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                   underlineColor={GOBALCOLOR.COLORS.BROWN}
                 />
@@ -381,20 +382,30 @@ const SignUpScreen = (props) => {
               </View>
               <TouchableOpacity style={styles.buttonStyle}
                 disabled={!isValid || !values.firstName || !values.lastName || !values.email || !values.password}
-                onPress={() => registerUser({
-                  // "FirmType": values.firmType,
-                  // "FirmRegisterNumber": values.firmRegisterNumber,
-                  // "FirmBranchName": values.firmBranchName,
-                  // "FirmOfficeAddress": values.firmOfficeAddress,
-                  // "FirmPhoneNumber": values.firmPhoneNumber,
-                  // "FirmEmialId": values.firmEmialId,
-                  "FirstName": values.firstName,
-                  "LastName": values.lastName,
-                  "email": values.email,
-                  "MobileNo": values.mobileNumber,
-                  "password": values.password,
-                  "cnfPassword": values.cnfPassword,
-                })} >
+                onPress={() => registerUser(
+                  checked === "individual" ? {
+                    "FirstName": values.firstName,
+                    "LastName": values.lastName,
+                    "email": values.email,
+                    "MobileNo": values.mobileNumber,
+                    "password": values.password,
+                    "cnfPassword": values.cnfPassword,
+                    "firmType": "individual"
+                  } : {
+                    "FirstName": values.firstName,
+                    "LastName": values.lastName,
+                    "email": values.email,
+                    "MobileNo": values.mobileNumber,
+                    "password": values.password,
+                    "cnfPassword": values.cnfPassword,
+                    "firmType": "company",
+                    "FirmName": values.firmName,
+                    "FirmRegNumber": values.firmRegisterNumber,
+                    "FirmBranchName": values.firmBranchName,
+                    "FirmOfficeAddress": values.firmOfficeAddress,
+                    "FirmPhoneNumber": values.firmPhoneNumber,
+                    "FirmEmailIid": values.firmEmialId
+                  })} >
                 <Text style={styles.buttonText}>Register</Text>
               </TouchableOpacity>
             </View>

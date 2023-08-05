@@ -10,6 +10,8 @@ const DashboardController = () => {
     const [accessToken, setAccessToken] = useState('');
     const [userId, setUserId] = useState('');
     const { sendCoordinates } = DashboardViewModel();
+    const [openFarmList, setOpenFarmList] = useState(false);
+    const [valueFarmList, setValuefarmList] = useState(null);
 
     const checkCoordinateClockWise = (requestJson) => {
         console.log("checkCoordinateClockWise requestJson", requestJson)
@@ -24,8 +26,15 @@ const DashboardController = () => {
         }
         console.log("checkCoordinateClockWise requestJson ParameterId", requestJson.ParameterId)
         console.log("area", area)
-        if (area < 0 && requestJson.ParameterId !== null) {
+        if (area < 0 && requestJson.ParameterId !== null && requestJson.FarmId !== null) {
             sendCoordinatesToServer(requestJson);
+        } else if (requestJson.FarmId === null) {
+            Toast.show({
+                variant: "solid",
+                text: 'Please Select Farm',
+                type: 'danger',
+                duration: 6000
+            })
         }
         else if (requestJson.ParameterId === null && area < 0) {
             Toast.show({
@@ -86,6 +95,10 @@ const DashboardController = () => {
     return {
         accessToken,
         userId,
+        openFarmList,
+        valueFarmList,
+        setOpenFarmList,
+        setValuefarmList,
         setAccessToken,
         setUserId,
         checkCoordinateClockWise,

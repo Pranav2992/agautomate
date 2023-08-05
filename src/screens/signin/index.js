@@ -77,7 +77,7 @@ const SignInScreen = (props) => {
                 handleChange('password')
               }
               onBlur={handleBlur('password')}
-              right={<TextInput.Icon icon="eye" iconColor={GOBALCOLOR.COLORS.BROWN} style={{ marginTop: 10 }} onPress={() => setShowPassword(!showPassword)} />}
+              right={<TextInput.Icon icon="eye" forceTextInputFocus={false} iconColor={GOBALCOLOR.COLORS.BROWN} style={{ marginTop: 10 }} onPress={() => setShowPassword(!showPassword)} />}
               activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
               underlineColor={GOBALCOLOR.COLORS.BROWN}
             />

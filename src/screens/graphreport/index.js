@@ -9,8 +9,9 @@ import GOBALCOLOR from '../../gobalconstant/colors';
 import ArrowIcon from 'react-native-vector-icons/MaterialIcons';
 import GraphReportController from "../../view-controllers/graphreportcontroller";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSelector, connect } from "react-redux";
+import { useSelector, connect, useDispatch } from "react-redux";
 import ProgressScreen from '../highordercomponents/progressscreen';
+import { farmList as getFarmList } from '../../store/actions/apiCallActions';
 const width = Dimensions.get('window').width;
 import {
     LineChart,
@@ -44,14 +45,24 @@ const GraphReportScreen = (props) => {
     const horizontalData = ["W1", "W2", "W3", "W4"];
     const fill = "rgb(134, 65, 244)";
     const contentInset = { top: 20, bottom: 20 }
-    const { getGraphDataResponse } = useSelector((state) => state.apiCallReducers);
+    const dispatch = useDispatch();
+    const { getGraphDataResponse, farmList } = useSelector((state) => state.apiCallReducers);
+
 
     const { open, itemMonths, items, openMonths, options, selectedGraphType, value, valueMonth, accessToken, isDrawGraph,
-        data, labels, setAccessToken, setItemMonths, setItems, setUserId, setGetGraphDataResponse, goBackScreen,
+        data, labels, openFarmList,
+        valueFarmList,
+        setOpenFarmList,
+        setValuefarmList, setAccessToken, setItemMonths, setItems, setUserId, setGetGraphDataResponse, goBackScreen,
         setOpen, setOpenMonths, setSelectedGraphType, setValue, setValueMonth, checkSelectedMonth, getGraphDataFromServer } = GraphReportController();
 
     useEffect(() => {
-        AsyncStorage.getItem('accessToken').then((accessToken) => { setAccessToken(accessToken) });
+        AsyncStorage.getItem('accessToken').then((accessToken) => {
+            setAccessToken(accessToken);
+            dispatch(getFarmList({
+                "authToken": accessToken,
+            }));
+        });
         AsyncStorage.getItem('userId').then((userId) => { setUserId(userId) });
         console.log(getGraphDataResponse)
         setGetGraphDataResponse(getGraphDataResponse);
@@ -83,9 +94,27 @@ const GraphReportScreen = (props) => {
                             setItems={setItems}
                         />
                     </View>
-                </View>
-                <View style={styles.dropdownContainer}>
-                    <View style={[styles.inputContainer]}>
+                    <View style={[styles.inputContainer, { marginTop: 10 }]}>
+                        <DropDownPicker
+                            schema={{
+                                label: 'FarmName',
+                                value: 'id'
+                            }}
+                            placeholder="Select Farm"
+                            style={styles.inputDropdown}
+                            open={openFarmList}
+                            value={valueFarmList}
+                            items={farmList}
+                            listMode="MODAL"
+                            setOpen={setOpenFarmList}
+                            setValue={setValuefarmList}
+                            // setItems={setItemMonths}
+                            onSelectItem={(item) => {
+
+                            }}
+                        />
+                    </View>
+                    <View style={[styles.inputContainer, { marginTop: 10 }]}>
                         <DropDownPicker
                             placeholder="Select Month"
                             style={styles.inputDropdown}
@@ -140,53 +169,54 @@ const GraphReportScreen = (props) => {
                     </TouchableOpacity>
                 </View>
                 {/*  <View> */}
-                {isDrawGraph ?
-                    <>
-                        {selectedGraphType === 'Daily' ?
-                            <ScrollView horizontal={true} nestedScrollEnabled>
-                                <LineChart
-                                    withHorizontalLabels={true}
-                                    data={{
-                                        labels: labels,
-                                        datasets: data
-                                    }}
-                                    width={600} // from react-native
-                                    height={300}
-                                    fromZero={true}
-                                    /*  yAxisLabel="$"
-                                     yAxisSuffix="k" */
-                                    yAxisInterval={1} // optional, defaults to 1
-                                    chartConfig={{
-                                        backgroundColor: "#e26a00",
-                                        backgroundGradientFrom: GOBALCOLOR.COLORS.WHITE,
-                                        backgroundGradientTo: GOBALCOLOR.COLORS.WHITE,
-                                        decimalPlaces: 0, // optional, defaults to 2dp
-                                        color: (opacity = 1) => `rgba(231, 135, 111, ${opacity})`,
-                                        labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                                        style: {
+                {
+                    isDrawGraph ?
+                        <>
+                            {selectedGraphType === 'Daily' ?
+                                <ScrollView horizontal={true} nestedScrollEnabled>
+                                    <LineChart
+                                        withHorizontalLabels={true}
+                                        data={{
+                                            labels: labels,
+                                            datasets: data
+                                        }}
+                                        width={600} // from react-native
+                                        height={300}
+                                        fromZero={true}
+                                        /*  yAxisLabel="$"
+                                         yAxisSuffix="k" */
+                                        yAxisInterval={1} // optional, defaults to 1
+                                        chartConfig={{
+                                            backgroundColor: "#e26a00",
+                                            backgroundGradientFrom: GOBALCOLOR.COLORS.WHITE,
+                                            backgroundGradientTo: GOBALCOLOR.COLORS.WHITE,
+                                            decimalPlaces: 0, // optional, defaults to 2dp
+                                            color: (opacity = 1) => `rgba(231, 135, 111, ${opacity})`,
+                                            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                            style: {
+                                                borderRadius: 16
+                                            },
+                                            propsForBackgroundLines: {
+                                                strokeWidth: 1,
+                                                stroke: "#e3e3e3",
+                                                strokeDasharray: "0",
+                                            },
+                                            propsForLabels: {
+                                                width: 10,
+                                                margin: 10,
+                                                backgroundColor: 'red'
+                                            }
+                                        }}
+                                        bezier
+                                        style={{
+                                            marginVertical: 8,
                                             borderRadius: 16
-                                        },
-                                        propsForBackgroundLines: {
-                                            strokeWidth: 1,
-                                            stroke: "#e3e3e3",
-                                            strokeDasharray: "0",
-                                        },
-                                        propsForLabels: {
-                                            width: 10,
-                                            margin: 10,
-                                            backgroundColor: 'red'
-                                        }
-                                    }}
-                                    bezier
-                                    style={{
-                                        marginVertical: 8,
-                                        borderRadius: 16
-                                    }}
-                                />
-                            </ScrollView> :
-                            <View style={{ flex: 1, backgroundColor: "#fff" }}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    {/*  <YAxis
+                                        }}
+                                    />
+                                </ScrollView> :
+                                <View style={{ flex: 1, backgroundColor: "#fff" }}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        {/*  <YAxis
                             data={[50, 10, 40, 95]}
                             contentInset={contentInset}
                             svg={{
@@ -197,46 +227,46 @@ const GraphReportScreen = (props) => {
                             numberOfTicks={10}
                             formatLabel={(value) => `${value}ºC`}
                         /> */}
-                                    <View style={{ width: 1, backgroundColor: "#000", marginLeft: 5 }} />
-                                    <BarChart
-                                        style={{ height: 200, marginTop: 10 }}
-                                        spacingInner={0.5}
-                                        bandwidth={2}
-                                        data={data1}
-                                        showValuesOnTopOfBars={true}
-                                        yAccessor={({ item }) => item.yAxisValue}
-                                        xAccessor={({ item }) => item.xAxisLabel}
-                                        yMin={0}
-                                        svg={{ fill }}
-                                        contentInset={{ contentInset }}
-                                    >
+                                        <View style={{ width: 1, backgroundColor: "#000", marginLeft: 5 }} />
+                                        <BarChart
+                                            style={{ height: 200, marginTop: 10 }}
+                                            spacingInner={0.5}
+                                            bandwidth={2}
+                                            data={data1}
+                                            showValuesOnTopOfBars={true}
+                                            yAccessor={({ item }) => item.yAxisValue}
+                                            xAccessor={({ item }) => item.xAxisLabel}
+                                            yMin={0}
+                                            svg={{ fill }}
+                                            contentInset={{ contentInset }}
+                                        >
 
-                                    </BarChart>
-                                </View>
-                                <View style={{ height: 1, backgroundColor: "#000" }} />
-                                <XAxis
-                                    style={{ marginTop: 5 }}
-                                    svg={{
-                                        fill: "#000",
-                                        fontSize: 12,
-                                        fontWeight: "500",
-                                    }}
-                                    data={horizontalData}
-                                    spacingInner={0}
-                                    contentInset={{ left: 55, right: 45 }}
-                                    formatLabel={(value, index) => horizontalData[index]}
-                                    labelStyle={{ color: "#000" }}
-                                />
-                            </View>}
-                    </> :
-                    <View>
-                    </View>
+                                        </BarChart>
+                                    </View>
+                                    <View style={{ height: 1, backgroundColor: "#000" }} />
+                                    <XAxis
+                                        style={{ marginTop: 5 }}
+                                        svg={{
+                                            fill: "#000",
+                                            fontSize: 12,
+                                            fontWeight: "500",
+                                        }}
+                                        data={horizontalData}
+                                        spacingInner={0}
+                                        contentInset={{ left: 55, right: 45 }}
+                                        formatLabel={(value, index) => horizontalData[index]}
+                                        labelStyle={{ color: "#000" }}
+                                    />
+                                </View>}
+                        </> :
+                        <View>
+                        </View>
                 }
 
                 {/*  </View> */}
-            </ScrollView>
+            </ScrollView >
             <ProgressScreen />
-        </View>
+        </View >
     )
 };
 

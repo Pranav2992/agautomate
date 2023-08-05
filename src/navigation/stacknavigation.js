@@ -10,6 +10,8 @@ import ForgetPasswordScreen from '../screens/forgetpassword';
 import DashboardScreen from '../screens/dashboard';
 import VerifyOtpScreen from '../screens/verifyotp';
 import GraphReportScreen from '../screens/graphreport';
+import AddFarm from '../screens/addfarm';
+import FarmList from '../screens/farmlist';
 
 const Stack = createStackNavigator();
 
@@ -90,6 +92,20 @@ const StackNavigation = (props) => {
                 }}
                 name="GraphReportScreen"
                 component={GraphReportScreen}
+            />
+            <Stack.Screen
+                options={{
+                    headerShown: null
+                }}
+                name="FarmList"
+                component={FarmList}
+            />
+            <Stack.Screen
+                options={{
+                    headerShown: null
+                }}
+                name="AddFarm"
+                component={AddFarm}
             />
         </Stack.Navigator>
     );
