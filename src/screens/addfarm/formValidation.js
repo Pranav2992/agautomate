@@ -4,7 +4,7 @@ const validationSchema = Yup.object().shape({
   //Firm Deatils Validation 
   farmName: Yup.string().required('Firmname is required'),
   farmerName: Yup.string().required('Farmer name is required'),
-  latitudeCoordiante1: Yup.number().required('Coordinate 1 latitude required'),
+  /* latitudeCoordiante1: Yup.number().required('Coordinate 1 latitude required'),
   longitudeCoordiante1: Yup.number().required('Coordinate 1 longitude required'),
   latitudeCoordiante2: Yup.number().required('Coordinate 2 latitude required'),
   longitudeCoordiante2: Yup.number().required('Coordinate 2 longitude required'),
@@ -13,7 +13,7 @@ const validationSchema = Yup.object().shape({
   latitudeCoordiante4: Yup.number().required('Coordinate 4 latitude required'),
   longitudeCoordiante4: Yup.number().required('Coordinate 4 longitude required'),
   latitudeCoordiante5: Yup.number().required('Coordinate 5 latitude required'),
-  longitudeCoordiante5: Yup.number().required('Coordinate 5 longitude required')
+  longitudeCoordiante5: Yup.number().required('Coordinate 5 longitude required') */
 });
 
 export default validationSchema;

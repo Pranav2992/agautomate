@@ -10,6 +10,7 @@ const AddFarmController = () => {
     const { addFarm, updateFarm } = AddFarmViewModel();
     const navigation = useNavigation();
     const [accessToken, setAccessToken] = useState('');
+    const [sendCoordinateWithFarm, setSendCoordinateWithFarm] = useState(false);
 
     const goBackScreen = () => {
         navigation.goBack();

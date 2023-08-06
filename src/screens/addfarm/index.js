@@ -11,6 +11,8 @@ import validationSchema from './formValidation';
 import ProgressScreen from '../highordercomponents/progressscreen';
 import AddFarmController from "../../view-controllers/addfarmcontroller";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Checkbox } from 'react-native-paper';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -95,6 +97,8 @@ const AddFarm = (props) => {
         });
     }, []);
 
+    const [checked, setChecked] = React.useState(false);
+
     return (
 
         <View style={styles.mainContainer}>
@@ -165,7 +169,17 @@ const AddFarm = (props) => {
                                     </Text>
                                 ) : null}
 
-                                <View>
+                                <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center', justifyContent: 'center' }}>
+                                    <Text style={{ fontSize: 15, fontWeight: '800', color: GOBALCOLOR.COLORS.BROWN }}>Want to add farm's map coordinates :</Text>
+                                    <Checkbox
+                                        status={checked ? 'checked' : 'unchecked'}
+                                        onPress={() => {
+                                            setChecked(!checked);
+                                        }}
+                                    />
+                                </View>
+
+                                {checked && <View>
                                     <Text style={{ fontSize: 15, marginTop: 15, fontWeight: '600', color: GOBALCOLOR.COLORS.BROWN }}>Coordinates 1 :</Text>
                                     <View style={{ flexDirection: 'row', marginTop: 5 }}>
                                         <View style={{ flex: 1 }}>
@@ -411,7 +425,7 @@ const AddFarm = (props) => {
                                             ) : null}
                                         </View>
                                     </View>
-                                </View>
+                                </View>}
                             </View>
                             <TouchableOpacity style={styles.buttonStyle}
                                 disabled={!isValid || !values.farmName || !values.farmerName}
@@ -421,14 +435,14 @@ const AddFarm = (props) => {
                                             FarmName: values.farmName,
                                             FarmerName: values.farmerName,
                                             authToken: accessToken,
-                                            Coordinate: `${values.latitudeCoordiante1},${values.longitudeCoordiante1},${values.latitudeCoordiante2},${values.longitudeCoordiante2},${values.latitudeCoordiante3},${values.longitudeCoordiante3},${values.latitudeCoordiante4},${values.longitudeCoordiante4},${values.latitudeCoordiante5},${values.longitudeCoordiante5}`
+                                            Coordinate: checked === true ? `${values.latitudeCoordiante1},${values.longitudeCoordiante1},${values.latitudeCoordiante2},${values.longitudeCoordiante2},${values.latitudeCoordiante3},${values.longitudeCoordiante3},${values.latitudeCoordiante4},${values.longitudeCoordiante4},${values.latitudeCoordiante5},${values.longitudeCoordiante5}` : ''
                                         }) : updateFarmerFarm(
                                             {
                                                 id: '' + props.route.params.selectedFarm.id,
                                                 FarmName: values.farmName,
                                                 FarmerName: values.farmerName,
                                                 authToken: accessToken,
-                                                Coordinate: `${values.latitudeCoordiante1},${values.longitudeCoordiante1},${values.latitudeCoordiante2},${values.longitudeCoordiante2},${values.latitudeCoordiante3},${values.longitudeCoordiante3},${values.latitudeCoordiante4},${values.longitudeCoordiante4},${values.latitudeCoordiante5},${values.longitudeCoordiante5}`
+                                                Coordinate: checked === true ? `${values.latitudeCoordiante1},${values.longitudeCoordiante1},${values.latitudeCoordiante2},${values.longitudeCoordiante2},${values.latitudeCoordiante3},${values.longitudeCoordiante3},${values.latitudeCoordiante4},${values.longitudeCoordiante4},${values.latitudeCoordiante5},${values.longitudeCoordiante5}` : ''
                                             }
                                         )}
                             >

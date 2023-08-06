@@ -8,6 +8,7 @@ import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackActions } from '@react-navigation/native';
 import Modal from "react-native-modal";
+import { Toast } from 'native-base';
 import GOBALCOLOR from '../../gobalconstant/colors';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -70,11 +71,22 @@ const DashboardScreen = (props) => {
     const [loadMap, setLoadMap] = useState(false);
     //const [isShowModal, setIsShowModal] = useState(false);
     const [markers, setMarkers] = useState([]);
+    const [farmHasCoordinates, setFarmHasCoordinates] = useState(false);
 
     const check = (coordinate) => {
-        console.log('coordinate = ', coordinate)
-        console.log('markers = ', markers)
-        setMarkers(markers => [...markers, coordinate])
+        if (valueFarmList === null || valueFarmList === '') {
+            Toast.show({
+                variant: "solid",
+                text: 'Please select farm.',
+                type: 'danger',
+                duration: 6000
+            })
+        } else {
+            console.log('coordinate = ', coordinate)
+            console.log('markers = ', markers)
+            setMarkers(markers => [...markers, coordinate])
+
+        }
     }
 
     const { isShowModal, isProgressShow } = useSelector((state) => state.appReducers);
@@ -134,30 +146,35 @@ const DashboardScreen = (props) => {
     }, [sendCoordinatesResponse]);
 
     const zoomToCoordinatesOnMap = (selectedFarm) => {
+
         console.log('selectedFarm = ', selectedFarm)
-        var coordinates = selectedFarm.Coordinate.split(',');
-        console.log('coordinates =', coordinates)
-        var finalCoordinates =
-            [{ "latitude": parseFloat(coordinates[0]), "longitude": parseFloat(coordinates[1]) },
-            { "latitude": parseFloat(coordinates[2]), "longitude": parseFloat(coordinates[3]) },
-            { "latitude": parseFloat(coordinates[4]), "longitude": parseFloat(coordinates[5]) },
-            { "latitude": parseFloat(coordinates[6]), "longitude": parseFloat(coordinates[7]) },
-            { "latitude": parseFloat(coordinates[8]), "longitude": parseFloat(coordinates[9]) }]
 
-        setMarkers([...finalCoordinates]);
+        if (selectedFarm.Coordinate !== '' || selectedFarm.Coordinate !== null) {
+            var coordinates = selectedFarm.Coordinate.split(',');
+            console.log('coordinates = ', coordinates)
+            console.log('coordinates =', coordinates)
+            var finalCoordinates =
+                [{ "latitude": parseFloat(coordinates[0]), "longitude": parseFloat(coordinates[1]) },
+                { "latitude": parseFloat(coordinates[2]), "longitude": parseFloat(coordinates[3]) },
+                { "latitude": parseFloat(coordinates[4]), "longitude": parseFloat(coordinates[5]) },
+                { "latitude": parseFloat(coordinates[6]), "longitude": parseFloat(coordinates[7]) },
+                { "latitude": parseFloat(coordinates[8]), "longitude": parseFloat(coordinates[9]) }]
 
-        setTimeout(() => {
-            console.log('markers =', markers)
+            setMarkers([...finalCoordinates]);
 
-            if (mapRef.current) {
-                console.log('map ref if')
-                // list of _id's must same that has been provided to the identifier props of the Marker
-                mapRef.current.fitToCoordinates(finalCoordinates);
-            }
-        }, 1500)
+            setTimeout(() => {
+                console.log('markers =', markers)
 
-
-
+                if (mapRef.current) {
+                    console.log('map ref if')
+                    // list of _id's must same that has been provided to the identifier props of the Marker
+                    mapRef.current.fitToCoordinates(finalCoordinates);
+                }
+            }, 1500);
+            setFarmHasCoordinates(true);
+        } else {
+            setFarmHasCoordinates(false);
+        }
     }
 
 
@@ -279,8 +296,7 @@ const DashboardScreen = (props) => {
                                     latitudeDelta: 0.05,
                                     longitudeDelta: 0.05,
                                 }}
-
-                            //onPress={(e) => check(e.nativeEvent.coordinate)}
+                                onPress={(e) => !farmHasCoordinates && check(e.nativeEvent.coordinate)}
                             >
                                 {markers.length > 4 && < Polygon
                                     coordinates={markers}
@@ -297,12 +313,12 @@ const DashboardScreen = (props) => {
                                     )
                                 })}
                             </MapView>
-                            {/*  <TouchableOpacity
+                            {farmHasCoordinates === false ? <TouchableOpacity
                                 style={styles.mapBtn}
                                 onPress={() => setMarkers([])}
                             >
                                 <Text style={styles.maBtnText}>Clear Area Section</Text>
-                            </TouchableOpacity> */}
+                            </TouchableOpacity> : ''}
                         </View>
                         : <ActivityIndicator color={GOBALCOLOR.COLORS.DARK_BLUE} size={"large"} />}
                 </View>
