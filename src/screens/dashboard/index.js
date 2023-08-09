@@ -149,7 +149,7 @@ const DashboardScreen = (props) => {
 
         console.log('selectedFarm = ', selectedFarm)
 
-        if (selectedFarm.Coordinate !== '' || selectedFarm.Coordinate !== null) {
+        if (selectedFarm.Coordinate !== null) {
             var coordinates = selectedFarm.Coordinate.split(',');
             console.log('coordinates = ', coordinates)
             console.log('coordinates =', coordinates)

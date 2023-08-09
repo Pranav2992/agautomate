@@ -46,6 +46,7 @@ const SplashScreen = (props) => {
         <View style={styles.mainContainer}>
             <StatusBar opaque animated={true}
                 backgroundColor={GOBALCOLORS.COLORS.DARK_BLUE}
+                
                 hidden={hidden} />
             {/* <Text style={styles.text}>Ag
                 <Text style={styles.text1}>Automate</Text>

@@ -59,9 +59,8 @@ const ProgressScreen = (props) => {
                     style={styles.image}
                     resizeMode="center"
                 />
-                <Text style={{ color: GOBALCOLOR.COLORS.BLUE, fontSize: 10, fontWeight: '700', justifyContent: 'center', alignSelf: 'center' }}>Please wait <Text>{dots + spaces}</Text></Text>
+                <Text style={{ color: GOBALCOLOR.COLORS.BLUE, fontSize: 10, fontWeight: 'bold', justifyContent: 'center', alignSelf: 'center' }}>Please wait <Text>{dots + spaces}</Text></Text>
             </Animated.View>
-
         </Modal>
     )
 };
