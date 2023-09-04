@@ -8,12 +8,17 @@ import { Root } from "native-base";
 
 const App = (props) => {
   LogBox.ignoreAllLogs();
-  useEffect(() => {
+  if (Text.defaultProps == null) Text.defaultProps = {};
+  Text.defaultProps.allowFontScaling = false;
+  if (TextInput.defaultProps == null) TextInput.defaultProps = {};
+  TextInput.defaultProps.allowFontScaling = false;
+
+  /* useEffect(() => {
     if (Text.defaultProps == null) Text.defaultProps = {};
     Text.defaultProps.allowFontScaling = false;
     if (TextInput.defaultProps == null) TextInput.defaultProps = {};
     TextInput.defaultProps.allowFontScaling = false;
-  }, []);
+  }, []); */
 
 
   return (

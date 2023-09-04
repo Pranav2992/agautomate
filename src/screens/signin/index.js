@@ -39,6 +39,7 @@ const SignInScreen = (props) => {
             <TextInput
               mode="flat"
               label="Email"
+              error={true}
               style={styles.input}
               value={values.email}
               keyboardType="email-address"
