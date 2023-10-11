@@ -24,10 +24,11 @@ const AddFarmController = () => {
             if (apiResponse.status === 200 && apiResponse.status !== undefined) {
                 Toast.show({
                     variant: "solid",
-                    text: 'Add Farm successfully.',
+                    text: 'Farm added successfully.',
                     type: 'success',
                     duration: 6000
                 })
+                navigation.navigate("FarmList");
             }
             else {
                 Toast.show({
@@ -46,14 +47,15 @@ const AddFarmController = () => {
         try {
             dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
             let apiResponse = await updateFarm(requestJson);
-            console.log("addFarmerFarm apiResponse", JSON.stringify(apiResponse))
+            console.log("updateFarm apiResponse", JSON.stringify(apiResponse))
             if (apiResponse.status === 200 && apiResponse.status !== undefined) {
                 Toast.show({
                     variant: "solid",
-                    text: 'Update Farm successfully.',
+                    text: 'Farm updated successfully.',
                     type: 'success',
-                    duration: 6000
+                    duration: 3000
                 })
+                navigation.navigate("FarmList");
 
             }
             else {

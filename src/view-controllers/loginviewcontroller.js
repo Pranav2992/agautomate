@@ -13,20 +13,24 @@ const LoginViewController = () => {
 
     const LoginUser = async (requestJson) => {
         dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
-        console.log("LoginUser requestJson----->", requestJson)
+        // console.log("LoginUser requestJson----->", requestJson)
         let apiResponse = await userLogin(requestJson);
-        console.log("apiResponse login controller--------->", apiResponse)
-        console.log("400 reponce--->", apiResponse.response.status)
-        if (apiResponse.response.status !== undefined && apiResponse.response.status === 200) {
+        console.log("apiResponse login controller------------------------------------------------------>", apiResponse)
+        // console.log("400 reponce--->", apiResponse.response.status)
+        if (apiResponse.status !== undefined && apiResponse.status === 200) {
             Toast.show({
                 variant: "solid",
                 text: 'User login successfully.',
                 type: 'success',
                 duration: 6000
             });
-            navigation.navigate("DashboardScreen");
+            console.log('lastponit------------------------------------------------------------------------------------------');
+            navigation.navigate("HomeScreen");
+            await dispatch({ type: SHOW_PROGRESS, isProgressShow: false });
+
+
         }
-        else if (apiResponse.response.status !== undefined && apiResponse.response.status === 400) {
+        else if (apiResponse.status !== undefined && apiResponse.status === 400) {
             console.log("apiResponse.response.data--", apiResponse.response)
             Toast.show({
                 variant: "solid",

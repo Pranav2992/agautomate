@@ -1,5 +1,5 @@
 import React, {StyleSheet, Dimensions} from 'react-native';
-import GOBALCOLORS from '../../gobalconstant/colors';
+import GOBALCOLORS from '../../../gobalconstant/colors';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -26,18 +26,25 @@ export default StyleSheet.create({
     borderColor: GOBALCOLORS.COLORS.BLUE,
     borderWidth: 1,
     height: 60,
+    width: width / 1.1,
     overflow: 'hidden',
     borderWidth: 0,
     marginTop: 0,
   },
   input: {
-    borderRadius: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    height: 55,
-    //overflow: 'hidden',
-    backgroundColor: GOBALCOLORS.COLORS.BROWN_LIGHT,
+    marginBottom: 16,
+    color: 'black',
+    backgroundColor: 'white',
   },
+  // input: {
+  //   borderRadius: 0,
+  //   borderTopLeftRadius: 0,
+  //   borderTopRightRadius: 0,
+  //   height: 55,
+  //   //overflow: 'hidden',
+  //   backgroundColor: GOBALCOLORS.COLORS.BROWN_LIGHT,
+  // },
+
   buttonStyle: {
     backgroundColor: GOBALCOLORS.COLORS.GREEN_2,
     justifyContent: 'center',
@@ -56,28 +63,11 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
   },
-  dropdownContainer: {
-    margin: 10,
-  },
-  inputDropdown: {
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderRadius: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    height: 55,
-    borderColor: GOBALCOLORS.COLORS.BROWN,
-    backgroundColor: GOBALCOLORS.COLORS.BROWN_LIGHT,
-  },
-  boxStyle: {
-    borderWidth: 0,
-    width: width / 3,
-    height: 55,
-    flexDirection: 'row',
-  },
-  rbBtn: {
-    flexDirection: 'row',
+  ErrorMessage: {
+    fontSize: 12,
+    color: 'red',
+    marginTop: 3,
+    textAlign: 'center',
   },
   spinnerTextStyle: {
     width: 250,
@@ -109,16 +99,15 @@ export default StyleSheet.create({
     zIndex: 999,
     paddingHorizontal: 8,
     fontSize: 14,
-    color:'black'
+    color: 'black',
   },
   placeholderStyle: {
     fontSize: 16,
-    color:'black'
-
+    color: 'black',
   },
   selectedTextStyle: {
     fontSize: 16,
-    color:'black'
+    color: 'black',
   },
   iconStyle: {
     width: 20,
@@ -127,6 +116,21 @@ export default StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
-    color:'black'
+    color: 'black',
+  },
+  datePickerStyle: {
+    width: 200,
+    marginTop: 20,
+  },
+    inputDropdown: {
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    height: 55,
+    borderColor: GOBALCOLORS.COLORS.BROWN,
+    backgroundColor: GOBALCOLORS.COLORS.BROWN_LIGHT,
   },
 });

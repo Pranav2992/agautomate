@@ -1,5 +1,6 @@
 import React, { StyleSheet, Dimensions } from "react-native";
-import GOBALCOLORS from '../../gobalconstant/colors';
+import GOBALCOLORS from '../../../gobalconstant/colors';
+import { black } from "react-native-paper/lib/typescript/src/styles/themes/v2/colors";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -84,4 +85,7 @@ export default StyleSheet.create({
         marginLeft: 16,
         marginRight: 16,
       },
+      text:{
+        color:'black'
+      }
 });

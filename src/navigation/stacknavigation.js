@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 //import screens
 import SplashScreen from '../screens/splash';
@@ -12,103 +12,120 @@ import VerifyOtpScreen from '../screens/verifyotp';
 import GraphReportScreen from '../screens/graphreport';
 import AddFarm from '../screens/addfarm';
 import FarmList from '../screens/farmlist';
-
+import HomeScreen from '../screens/home';
+import NavigationBottomTab from './bottomNavigation';
+import AddCrop from '../screens/crop/add';
+import CropListScreen from '../screens/crop/list';
 const Stack = createStackNavigator();
 
 const horizontalAnimation = {
-    gestureDirection: 'horizontal',
-    cardStyleInterpolator: ({ current, layouts }) => {
-        return {
-            cardStyle: {
-                transform: [
-                    {
-                        translateX: current.progress.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [layouts.screen.width, 0],
-                        }),
-                    },
-                ],
-            },
-        };
-    },
+  gestureDirection: 'horizontal',
+  cardStyleInterpolator: ({current, layouts}) => {
+    return {
+      cardStyle: {
+        transform: [
+          {
+            translateX: current.progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [layouts.screen.width, 0],
+            }),
+          },
+        ],
+      },
+    };
+  },
 };
 
-const StackNavigation = (props) => {
-    return (
-        <Stack.Navigator
-            screenOptions={horizontalAnimation}>
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="SplashScreen"
-                component={SplashScreen}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="SignInScreen"
-                component={SignInScreen}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="SignUpScreen"
-                component={SignUpScreen}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="ProfileScreen"
-                component={ProfileScreen}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="ForgetPasswordScreen"
-                component={ForgetPasswordScreen}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="DashboardScreen"
-                component={DashboardScreen}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="VerifyOtpScreen"
-                component={VerifyOtpScreen}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="GraphReportScreen"
-                component={GraphReportScreen}
-            />
-            <Stack.Screen
+const StackNavigation = props => {
+  return (
+    <Stack.Navigator screenOptions={horizontalAnimation}>
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="SplashScreen"
+        component={SplashScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="SignInScreen"
+        component={SignInScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="SignUpScreen"
+        component={SignUpScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="ProfileScreen"
+        component={ProfileScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="ForgetPasswordScreen"
+        component={ForgetPasswordScreen}
+      />
+      {/* <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="CropList"
+        component={CropListScreen}
+      /> */}
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="VerifyOtpScreen"
+        component={VerifyOtpScreen}
+      />
+      {/* <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="GraphReportScreen"
+        component={GraphReportScreen}
+      /> */}
+      {/* <Stack.Screen
                 options={{
                     headerShown: null
                 }}
                 name="FarmList"
                 component={FarmList}
-            />
-            <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="AddFarm"
-                component={AddFarm}
-            />
-        </Stack.Navigator>
-    );
-}
+            /> */}
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="AddFarm"
+        component={AddFarm}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="AddCrop"
+        component={AddCrop}
+      />
+
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="HomeScreen"
+        component={NavigationBottomTab}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default StackNavigation;
