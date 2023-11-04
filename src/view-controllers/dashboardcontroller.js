@@ -12,6 +12,12 @@ const DashboardController = () => {
     const { sendCoordinates } = DashboardViewModel();
     const [openFarmList, setOpenFarmList] = useState(false);
     const [valueFarmList, setValuefarmList] = useState(null);
+    const navigation = useNavigation();
+
+    const goBackScreen = () => {
+        navigation.goBack();
+    };
+
 
     const checkCoordinateClockWise = (requestJson) => {
         console.log("checkCoordinateClockWise requestJson", requestJson)
@@ -102,7 +108,8 @@ const DashboardController = () => {
         setAccessToken,
         setUserId,
         checkCoordinateClockWise,
-        sendCoordinatesToServer
+        sendCoordinatesToServer,
+        goBackScreen
     }
 }
 

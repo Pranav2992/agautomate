@@ -1,5 +1,9 @@
-import React, { StyleSheet } from "react-native";
+import React, { StyleSheet, Dimensions } from "react-native";
 import GOBALCOLORS from '../../gobalconstant/colors';
+
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+
 
 export default StyleSheet.create({
     mainContainer: {
@@ -17,5 +21,9 @@ export default StyleSheet.create({
         color: GOBALCOLORS.COLORS.ORANAGE,
         fontSize: 40,
         fontWeight: 'bold',
-    }
+    },
+    logoImg: {
+        height: width / 2,
+        width: width / 2,
+    },
 })

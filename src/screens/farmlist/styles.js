@@ -17,7 +17,7 @@ export default StyleSheet.create({
         /* justifyContent: 'space-between' */
     },
     appBarTitle: {
-        fontSize: 25,
+        fontSize: 22,
         fontWeight: '600',
         color: GOBALCOLORS.COLORS.WHITE
     },
@@ -65,13 +65,13 @@ export default StyleSheet.create({
     },
     mainCardView: {
         height: 90,
-        width:'90%',
+        width: '90%',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
         borderRadius: 15,
         shadowColor: GOBALCOLORS.COLORS.BLUE,
-        shadowOffset: {width: 0, height: 0},
+        shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 1,
         shadowRadius: 8,
         elevation: 8,
@@ -83,5 +83,5 @@ export default StyleSheet.create({
         marginBottom: 6,
         marginLeft: 16,
         marginRight: 16,
-      },
+    },
 });

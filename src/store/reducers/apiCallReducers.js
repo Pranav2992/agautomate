@@ -11,6 +11,7 @@ import {
   ADD_CROP_DETAILS,
   GET_ALL_CROP,
   GET_ALL_CROP_DETAILS,
+  GET_CROP_VARIETY
 } from '../types';
 
 const initialState = {
@@ -24,6 +25,7 @@ const initialState = {
   cropList: [],
   cropDetailsList: [],
   addCropDetailsResponse: null,
+  cropVarietyList: []
 };
 
 export default (state = initialState, action) => {
@@ -82,6 +84,10 @@ export default (state = initialState, action) => {
         ...state,
         cropDetailsList: action.apiResponse,
       };
+    case GET_CROP_VARIETY: return {
+      ...state,
+      cropVarietyList: action.apiResponse,
+    }
     default:
       return state;
   }

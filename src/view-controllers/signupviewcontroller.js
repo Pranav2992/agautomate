@@ -5,6 +5,7 @@ import { Snackbar } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
 import { Toast } from 'native-base';
 import { SHOW_PROGRESS } from '../store/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpViewController = () => {
     const dispatch = useDispatch();
@@ -40,6 +41,8 @@ const SignUpViewController = () => {
                 duration: 6000
             });
             navigation.navigate('VerifyOtpScreen', { email: requestJson.email });
+            AsyncStorage.setItem('email', requestJson.email);
+            AsyncStorage.setItem('signup', 'true');
         }
         else if (apiResponse.response.status !== undefined && apiResponse.response.status === 400) {
             Toast.show({

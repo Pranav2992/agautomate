@@ -1,23 +1,26 @@
-import React, {useEffect} from 'react';
-import {View, Text, Dimensions, FlatList} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import GOBALCOLOR from '../../gobalconstant/colors';
+import GOBALCOLOR, { COLORS } from '../../gobalconstant/colors';
 import ProgressScreen from '../highordercomponents/progressscreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FarmListController from '../../view-controllers/farmlistcontroller';
-import {useNavigation} from '@react-navigation/native';
-import {connect, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { connect, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {IconButton} from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
+import Modal from 'react-native-modal';
 import moment from 'moment/moment';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const FarmList = props => {
-  const {goBackScreen, getFarmList} = FarmListController();
+  const { goBackScreen, getFarmList, deleteFarmFromList } = FarmListController();
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
   const navigation = useNavigation();
-  const {farmList} = useSelector(state => state.apiCallReducers);
+  const { farmList } = useSelector(state => state.apiCallReducers);
 
   useEffect(() => {
     AsyncStorage.getItem('accessToken').then(accessToken => {
@@ -30,23 +33,23 @@ const FarmList = props => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.appBarContainer}>
-        {/* <View style={{flexDirection: 'row', position: 'absolute', left: 5}}>
+        <View style={{ flexDirection: 'row', position: 'absolute', left: 0 }}>
           <Ionicons
             name="arrow-back"
-            size={35}
-            style={{margin: 10, color: '#FFF'}}
+            size={30}
+            style={{ margin: 10, color: '#FFF' }}
             onPress={() => goBackScreen()}
           />
-        </View> */}
-        <View style={{marginLeft: 20}}>
-          <Text style={styles.appBarTitle}>Farm List</Text>
         </View>
-        <View style={{flexDirection: 'row', position: 'absolute', right: 0}}>
+        <View style={{ marginLeft: 50 }}>
+          <Text style={styles.appBarTitle}>My Farm List</Text>
+        </View>
+        <View style={{ flexDirection: 'row', position: 'absolute', right: 0 }}>
           <MaterialCommunityIcons
-            name="home-plus"
+            name="plus"
             size={32}
-            style={{margin: 10, color: '#FFF'}}
-            onPress={() => navigation.navigate('AddFarm', {comesFrom: 'new'})}
+            style={{ margin: 10, color: '#FFF' }}
+            onPress={() => navigation.navigate('AddFarm', { comesFrom: 'new' })}
           />
         </View>
       </View>
@@ -55,12 +58,12 @@ const FarmList = props => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           listKey={(item, index) => 'A.' + index.toString()}
-          style={{marginTop: 5}}
+          style={{ marginTop: 5 }}
           data={farmList}
           // contentContainerStyle={{ paddingBottom: 120 }}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <View style={styles.mainCardView}>
                   <View
                     style={{
@@ -68,8 +71,8 @@ const FarmList = props => {
                       alignItems: 'center',
                       width: '100%',
                     }}>
-                    <View style={{width: '10%'}}></View>
-                    <View style={{width: '75%'}}>
+                    <View style={{ width: '10%' }}></View>
+                    <View style={{ width: '75%' }}>
                       <Text
                         style={{
                           fontSize: 20,
@@ -114,12 +117,25 @@ const FarmList = props => {
                         icon="pencil"
                         color="#fff"
                         iconColor="white"
-                        size={28}
+                        size={22}
                         onPress={() =>
                           navigation.navigate('AddFarm', {
                             comesFrom: 'edit',
                             selectedFarm: item,
                           })
+                        }
+                      />
+                      <View style={{ height: 1, backgroundColor: COLORS.WHITE, width: '80%' }} />
+                      <IconButton
+                        icon="delete"
+                        color="#fff"
+                        iconColor="white"
+                        size={22}
+                        onPress={() => {
+                          setIsShowModal(true);
+                          setSelectedItem(item);
+                          //deleteFarmFromList({ 'id': item.id })
+                        }
                         }
                       />
                     </View>
@@ -229,7 +245,7 @@ const FarmList = props => {
           keyExtractor={(item, index) => 'ca' + index.toString()}
         />
       ) : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text
             style={{
               color: GOBALCOLOR.COLORS.BLACK,
@@ -240,7 +256,41 @@ const FarmList = props => {
           </Text>
         </View>
       )}
-    </View>
+
+      <Modal
+        isVisible={isShowModal}
+        animationIn="bounceIn"
+        animationOut="bounceOut"
+        coverScreen={true}
+        hasBackdrop={true}
+        animationInTiming={500}
+        animationOutTiming={500}
+        backdropTransitionInTiming={500}
+        backdropTransitionOutTiming={500}
+        backdropColor="black"
+        backdropOpacity={0.7}>
+        <View style={{ width: width / 2, alignSelf: 'center', backgroundColor: GOBALCOLOR.COLORS.WHITE, borderRadius: 10 }}>
+          <Text style={{ color: COLORS.BLACK, fontSize: 16, fontWeight: '800', padding: 10 }}>{`Do you want to delete `}<Text style={{ color: COLORS.ORANAGE }}>{selectedItem?.FarmName}</Text>{` ?`}</Text>
+          <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center' }}>
+            <View style={{ flex: 1, backgroundColor: COLORS.ORANAGE, borderBottomLeftRadius: 10 }}>
+              <TouchableOpacity style={{ padding: 10, alignItems: 'center' }} onPress={() =>
+                AsyncStorage.getItem('accessToken').then(accessToken => {
+                  deleteFarmFromList({ 'id': selectedItem.id, 'authToken': accessToken });
+                  setIsShowModal(false);
+                })}>
+                <Text style={{ color: COLORS.WHITE, fontWeight: '700', fontSize: 15 }}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ height: '100%', width: 1, backgroundColor: COLORS.WHITE }} />
+            <View style={{ flex: 1, backgroundColor: COLORS.BLUE, borderBottomRightRadius: 10 }}>
+              <TouchableOpacity style={{ padding: 10, alignItems: 'center' }} onPress={() => setIsShowModal(false)}>
+                <Text style={{ color: COLORS.WHITE, fontWeight: '700', fontSize: 15 }}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal >
+    </View >
   );
 };
 

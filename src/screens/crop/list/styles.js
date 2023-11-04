@@ -18,7 +18,7 @@ export default StyleSheet.create({
         /* justifyContent: 'space-between' */
     },
     appBarTitle: {
-        fontSize: 25,
+        fontSize: 22,
         fontWeight: '600',
         color: GOBALCOLORS.COLORS.WHITE
     },

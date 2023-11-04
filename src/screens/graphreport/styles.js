@@ -1,4 +1,4 @@
-import React, {StyleSheet, Dimensions} from 'react-native';
+import React, { StyleSheet, Dimensions } from 'react-native';
 import GOBALCOLORS from '../../gobalconstant/colors';
 
 const width = Dimensions.get('window').width;
@@ -17,7 +17,7 @@ export default StyleSheet.create({
     /* justifyContent: 'space-between' */
   },
   appBarTitle: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     color: GOBALCOLORS.COLORS.WHITE,
   },
@@ -47,7 +47,7 @@ export default StyleSheet.create({
     width: width / 1.1,
     borderRadius: 10,
     shadowColor: GOBALCOLORS.COLORS.GREEN_2,
-    shadowOffset: {width: 1, height: 1},
+    shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.2,
     elevation: 7,
   },
@@ -109,16 +109,16 @@ export default StyleSheet.create({
     zIndex: 999,
     paddingHorizontal: 8,
     fontSize: 14,
-    color:'black'
+    color: 'black'
   },
   placeholderStyle: {
     fontSize: 16,
-    color:'black'
+    color: 'black'
 
   },
   selectedTextStyle: {
     fontSize: 16,
-    color:'black'
+    color: 'black'
   },
   iconStyle: {
     width: 20,
@@ -127,6 +127,7 @@ export default StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
-    color:'black'
+    color: 'black'
   },
+  
 });

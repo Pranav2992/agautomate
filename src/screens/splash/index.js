@@ -1,13 +1,13 @@
-import React, {useEffect, useState, useCallback} from 'react';
-import {View, Text, StatusBar, Image} from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StatusBar, Image } from 'react-native';
 import styles from '../splash/styles';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import GOBALCOLORS from '../../gobalconstant/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {connect, useSelector} from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 const SplashScreen = props => {
-  const {userLogged} = useSelector(state => state.appReducers);
+  const { userLogged } = useSelector(state => state.appReducers);
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
@@ -49,10 +49,18 @@ const SplashScreen = props => {
                 <Text style={styles.text1}>Automate</Text>
             </Text> */}
       <Image
-        source={require('../../assets/AgAutomate.png')}
-        style={{height: 200}}
+        source={require('../../assets/agvision_logo.png')}
+        style={{ height: 200, width: 200 }}
         resizeMode="center"
       />
+      <View style={{ position: 'absolute', bottom: 20, alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ fontSize: 20, color: GOBALCOLORS.COLORS.WHITE, fontWeight: "bold" }}>A product by</Text>
+        <Image
+          source={require('../../assets/AgAutomate.png')}
+          style={{ height: 70, width: 70 }}
+          resizeMode="contain"
+        />
+      </View>
     </View>
   );
 };

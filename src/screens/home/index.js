@@ -1,10 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, Alert, BackHandler} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Alert, BackHandler, Dimensions, TouchableOpacity } from 'react-native';
 import styles from './styles';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {StackActions, useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import GOBALCOLOR, { COLORS } from '../../gobalconstant/colors';
+import LottieView from 'lottie-react-native';
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 const HomeScreen = props => {
   const navigation = useNavigation();
@@ -18,7 +22,7 @@ const HomeScreen = props => {
             onPress: () => null,
             style: 'cancel',
           },
-          {text: 'YES', onPress: () => BackHandler.exitApp()},
+          { text: 'YES', onPress: () => BackHandler.exitApp() },
         ]);
         return true;
       }
@@ -42,14 +46,14 @@ const HomeScreen = props => {
             onPress={() => goBackScreen()}
           />
         </View> */}
-        <View style={{marginLeft: 20}}>
+        <View style={{ marginLeft: 20 }}>
           <Text style={styles.appBarTitle}>Home</Text>
         </View>
-        <View style={{flexDirection: 'row', position: 'absolute', right: 0}}>
-          <MaterialCommunityIcons
+        <View style={{ flexDirection: 'row', position: 'absolute', right: 0 }}>
+          <MaterialIcons
             name="logout"
-            size={32}
-            style={{margin: 10, color: '#FFF'}}
+            size={30}
+            style={{ margin: 10, color: '#FFF' }}
             onPress={() => {
               Alert.alert('Logout', 'Do you want to logout?', [
                 {
@@ -61,7 +65,7 @@ const HomeScreen = props => {
                   text: 'OK',
                   onPress: () => {
                     AsyncStorage.setItem('isLogged', 'false');
-                    dispatch({type: 'USER_LOGGED', userLogged: false});
+                    dispatch({ type: 'USER_LOGGED', userLogged: false });
                     navigation.dispatch(StackActions.popToTop());
                   },
                 },
@@ -71,13 +75,112 @@ const HomeScreen = props => {
         </View>
       </View>
       <View style={styles.mainContainer}>
-        <Text
-          style={styles.text}
-          onPress={() => {
-            navigation.navigate('CropList', {comesFrom: 'new'});
-          }}>
-          Home
-        </Text>
+        <View>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity onPress={() => props.navigation.navigate('FarmList')} style={{ backgroundColor: COLORS.GREEN_1, borderRadius: 10, margin: 10, width: width / 3, height: width / 3, alignItems: 'center', justifyContent: 'center' }}>
+              <LottieView
+                visible={true}
+                source={require('../../assets/farms.json')}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+                autoPlay
+                loop />
+              <Text style={{ color: COLORS.WHITE, fontSize: 16, textAlign: 'center', fontWeight: '500' }}>My Farm List</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => props.navigation.navigate('CropList')} style={{ backgroundColor: COLORS.GREEN_1, borderRadius: 10, margin: 10, width: width / 3, height: width / 3, alignItems: 'center', justifyContent: 'center' }}>
+              <LottieView
+                visible={true}
+                source={require('../../assets/crops.json')}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+                autoPlay
+                loop />
+              <Text style={{ color: COLORS.WHITE, fontSize: 16, textAlign: 'center', fontWeight: '500' }}>Crop List</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity onPress={() => props.navigation.navigate('DashboardScreen')} style={{ backgroundColor: COLORS.GREEN_1, borderRadius: 10, margin: 10, width: width / 3, height: width / 3, alignItems: 'center', justifyContent: 'center' }}>
+              <LottieView
+                visible={true}
+                source={require('../../assets/report.json')}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+                autoPlay
+                loop />
+              <Text style={{ color: COLORS.WHITE, fontSize: 16, textAlign: 'center', fontWeight: '500' }}>My Farm Reports</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => props.navigation.navigate('GraphReportScreen')} style={{ backgroundColor: COLORS.GREEN_1, borderRadius: 10, margin: 10, width: width / 3, height: width / 3, alignItems: 'center', justifyContent: 'center' }}>
+              <LottieView
+                visible={true}
+                source={require('../../assets/graphs.json')}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+                autoPlay
+                loop />
+              <Text style={{ color: COLORS.WHITE, fontSize: 16, textAlign: 'center', fontWeight: '500' }}>Historical Report</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity /* onPress={() => props.navigation.navigate('DashboardScreen')} */ style={{ backgroundColor: 'gray', borderRadius: 10, margin: 10, width: width / 3, height: width / 3, alignItems: 'center', justifyContent: 'center' }}>
+              <LottieView
+                visible={true}
+                source={require('../../assets/sale.json')}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+                autoPlay
+                loop />
+              <Text style={{ color: COLORS.WHITE, fontSize: 16, textAlign: 'center', fontWeight: '500' }}>Sale My Produce</Text>
+            </TouchableOpacity>
+            <TouchableOpacity /* onPress={() => props.navigation.navigate('GraphReportScreen')} */ style={{ backgroundColor: 'gray', borderRadius: 10, margin: 10, width: width / 3, height: width / 3, alignItems: 'center', justifyContent: 'center' }}>
+              <LottieView
+                visible={true}
+                source={require('../../assets/graphs.json')}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+                autoPlay
+                loop />
+              <Text style={{ color: COLORS.WHITE, fontSize: 16, textAlign: 'center', fontWeight: '500' }}>Buy Farm Inputs</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity /* onPress={() => props.navigation.navigate('DashboardScreen')} */ style={{ backgroundColor: 'gray', borderRadius: 10, margin: 10, width: width / 3, height: width / 3, alignItems: 'center', justifyContent: 'center' }}>
+              <LottieView
+                visible={true}
+                source={require('../../assets/finance_ass.json')}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+                autoPlay
+                loop />
+              <Text style={{ color: COLORS.WHITE, fontSize: 16, textAlign: 'center', fontWeight: '500' }}>Finance Assistance</Text>
+            </TouchableOpacity>
+            <TouchableOpacity /* onPress={() => props.navigation.navigate('GraphReportScreen')} */ style={{ backgroundColor: 'gray', borderRadius: 10, margin: 10, width: width / 3, height: width / 3, alignItems: 'center', justifyContent: 'center' }}>
+              <LottieView
+                visible={true}
+                source={require('../../assets/graphs.json')}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+                autoPlay
+                loop />
+              <Text style={{ color: COLORS.WHITE, fontSize: 16, textAlign: 'center', fontWeight: '500' }}>{`Equipment\nRentals`}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </>
   );

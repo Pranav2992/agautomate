@@ -17,6 +17,7 @@ const AddFarmController = () => {
     }
 
     const addFarmerFarm = async (requestJson) => {
+        console.log('requestJson == ', requestJson)
         try {
             dispatch({ type: SHOW_PROGRESS, isProgressShow: true });
             let apiResponse = await addFarm(requestJson);

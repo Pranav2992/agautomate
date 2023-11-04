@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 //import screens
 import SplashScreen from '../screens/splash';
@@ -20,7 +20,7 @@ const Stack = createStackNavigator();
 
 const horizontalAnimation = {
   gestureDirection: 'horizontal',
-  cardStyleInterpolator: ({current, layouts}) => {
+  cardStyleInterpolator: ({ current, layouts }) => {
     return {
       cardStyle: {
         transform: [
@@ -74,13 +74,13 @@ const StackNavigation = props => {
         name="ForgetPasswordScreen"
         component={ForgetPasswordScreen}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         options={{
           headerShown: null,
         }}
         name="CropList"
         component={CropListScreen}
-      /> */}
+      />
       <Stack.Screen
         options={{
           headerShown: null,
@@ -88,20 +88,20 @@ const StackNavigation = props => {
         name="VerifyOtpScreen"
         component={VerifyOtpScreen}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         options={{
           headerShown: null,
         }}
         name="GraphReportScreen"
         component={GraphReportScreen}
-      /> */}
-      {/* <Stack.Screen
-                options={{
-                    headerShown: null
-                }}
-                name="FarmList"
-                component={FarmList}
-            /> */}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: null
+        }}
+        name="FarmList"
+        component={FarmList}
+      />
       <Stack.Screen
         options={{
           headerShown: null,
@@ -116,7 +116,13 @@ const StackNavigation = props => {
         name="AddCrop"
         component={AddCrop}
       />
-
+      <Stack.Screen
+        options={{
+          headerShown: null,
+        }}
+        name="DashboardScreen"
+        component={DashboardScreen}
+      />
       <Stack.Screen
         options={{
           headerShown: null,

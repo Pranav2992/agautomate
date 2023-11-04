@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,21 +8,24 @@ import {
   Alert,
 } from 'react-native';
 import styles from './styles';
-import {TextInput} from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import GOBALCOLOR from '../../gobalconstant/colors';
-import {connect, useSelector} from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import LoginViewController from '../../view-controllers/loginviewcontroller';
-import {Formik} from 'formik';
-import {validationSchema} from './formValidation';
+import { Formik } from 'formik';
+import { validationSchema } from './formValidation';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = props => {
-  navigation=useNavigation()
-  const {LoginUser, showPassword, setShowPassword} = LoginViewController();
+  const navigation = useNavigation()
+  const { LoginUser, showPassword, setShowPassword } = LoginViewController();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {isShowModal, isProgressShow} = useSelector(state => state.appReducers);
+  let isSignedUp = 'false';
+  let userEmail = '';
+  const { isShowModal, isProgressShow } = useSelector(state => state.appReducers);
   useEffect(() => {
     const backAction = () => {
       if (navigation.isFocused()) {
@@ -42,6 +45,14 @@ const SignInScreen = props => {
       'hardwareBackPress',
       backAction,
     );
+
+    AsyncStorage.getItem('signup').then((result) => {
+      isSignedUp = result;
+    });
+
+    AsyncStorage.getItem('email').then((result) => {
+      userEmail = result;
+    });
 
     return () => backHandler.remove();
   }, []);
@@ -75,22 +86,23 @@ const SignInScreen = props => {
             size="large"
             customIndicator={
               <Image
-                source={require('../../assets/agautomate_logo.png')}
+                source={require('../../assets/agvision_logo.png')}
                 style={styles.image}
                 resizeMode="center"
               />
             }></Spinner>
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../../assets/AgAutomate.png')}
-              style={styles.logoImg}
-            />
-          </View>
-          <Text style={styles.signUpLabel}>Sign In</Text>
+          {/*  <View style={styles.logoContainer}> */}
+          <Image
+            source={require('../../assets/agvision_logo.png')}
+            style={styles.logoImg}
+            resizeMode='center'
+          />
+          {/* </View> */}
+          <Text style={[styles.signUpLabel, { marginTop: 15 }]}>Sign In</Text>
           <View style={[styles.inputContainer]}>
             <TextInput
               mode="outlined"
-              label="Email"
+              label="Email/Mobile Number"
               style={styles.input}
               value={values.email}
               keyboardType="email-address"
@@ -102,7 +114,7 @@ const SignInScreen = props => {
               onBlur={handleBlur('email')}
               activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
               underlineColor={GOBALCOLOR.COLORS.BROWN}
-              outlineStyle={{borderWidth: 0.5}}
+              outlineStyle={{ borderWidth: 0.5 }}
               activeOutlineColor={
                 errors.email && touched.email ? 'red' : 'black'
               }
@@ -113,9 +125,9 @@ const SignInScreen = props => {
               <Text style={styles.ErrorMessage}>{errors.email + ' *'}</Text>
             ) : null}
           </View>
-          <View style={[styles.inputContainer, {marginTop: 20}]}>
+          <View style={[styles.inputContainer, { marginTop: 20 }]}>
             <TextInput
-              mode="outlined" 
+              mode="outlined"
               label="Password"
               secureTextEntry={showPassword}
               style={styles.input}
@@ -131,13 +143,13 @@ const SignInScreen = props => {
                   icon={showPassword ? 'eye-off' : 'eye'}
                   forceTextInputFocus={false}
                   iconColor={GOBALCOLOR.COLORS.BROWN}
-                  style={{marginTop: 10}}
+                  style={{ marginTop: 10 }}
                   onPress={() => setShowPassword(!showPassword)}
                 />
               }
               activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
               underlineColor={GOBALCOLOR.COLORS.BROWN}
-              outlineStyle={{borderWidth: 0.5}}
+              outlineStyle={{ borderWidth: 0.5 }}
               activeOutlineColor={
                 errors.password && touched.password ? 'red' : 'black'
               }
@@ -180,14 +192,17 @@ const SignInScreen = props => {
           <View style={styles.dhaContainer}>
             <Text style={styles.dhaLabel}>Don`t have an account?</Text>
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('SignUpScreen')}>
-              <Text style={styles.suLabel}>Create account</Text>
+              onPress={() => {
+                isSignedUp ? navigation.navigate('VerifyOtpScreen', { email: userEmail }) : props.navigation.navigate('SignUpScreen')
+              }}>
+              <Text style={styles.suLabel}> Create account</Text>
             </TouchableOpacity>
           </View>
           {/* <ProgressScreen /> */}
         </View>
-      )}
-    </Formik>
+      )
+      }
+    </Formik >
   );
 };
 

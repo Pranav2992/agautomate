@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -17,13 +17,13 @@ import MapView, {
   Polygon,
   Overlay,
 } from 'react-native-maps';
-import {connect, useSelector, useDispatch} from 'react-redux';
-import {SHOW_MODAL, SHOW_PROGRESS} from '../../store/types';
-import {TextInput} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {StackActions} from '@react-navigation/native';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import { SHOW_MODAL, SHOW_PROGRESS } from '../../store/types';
+import { TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 import Modal from 'react-native-modal';
-import {Toast} from 'native-base';
+import { Toast } from 'native-base';
 import GOBALCOLOR from '../../gobalconstant/colors';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -48,7 +48,6 @@ import {
   Tabs,
   Footer,
 } from 'native-base';
-
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -56,13 +55,13 @@ import GetLocation from 'react-native-get-location';
 import Geocoder from 'react-native-geocoder';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DashboardController from '../../view-controllers/dashboardcontroller';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import ProgressScreen from '../highordercomponents/progressscreen';
-import {farmList as getFarmList} from '../../store/actions/apiCallActions';
+import { farmList as getFarmList } from '../../store/actions/apiCallActions';
 import Spinner from 'react-native-loading-spinner-overlay';
 import NavigationBottomTab from '../../navigation/bottomNavigation';
 import Header from '../highordercomponents/header/header';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 import CropController from '../../view-controllers/cropController';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -80,16 +79,17 @@ const DashboardScreen = props => {
     openFarmList,
     valueFarmList,
     setOpenFarmList,
+    goBackScreen,
     setValuefarmList,
   } = DashboardController();
-  const { Crop_Details_List} =
-  CropController();
+  const { Crop_Details_List } =
+    CropController();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Yeild', value: '1'},
-    {label: 'Pol In Cane', value: '2'},
-    {label: 'Water Stress', value: '3'},
+    { label: 'Yeild', value: '1' },
+    { label: 'Pol In Cane', value: '2' },
+    { label: 'Water Stress', value: '3' },
   ]);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -116,10 +116,11 @@ const DashboardScreen = props => {
     }
   };
 
-  const {isShowModal, isProgressShow} = useSelector(state => state.appReducers);
-  const {sendCoordinatesResponse} = useSelector(state => state.apiCallReducers);
-  const {farmList} = useSelector(state => state.apiCallReducers);
-  const {cropDetailsList} = useSelector(state => state.apiCallReducers);
+  const { isShowModal, isProgressShow } = useSelector(state => state.appReducers);
+  const { sendCoordinatesResponse } = useSelector(state => state.apiCallReducers);
+  const { farmList } = useSelector(state => state.apiCallReducers);
+  const { cropDetailsList } = useSelector(state => state.apiCallReducers);
+  const [selectedFarm, setSelectedFarm] = useState('');
 
   const mapRef = useRef();
 
@@ -174,7 +175,7 @@ const DashboardScreen = props => {
       .catch(error => {
         /* setFetching(false); */
         console.log('error ==', error);
-        const {code, message} = error;
+        const { code, message } = error;
       });
   }, [sendCoordinatesResponse]);
 
@@ -227,7 +228,7 @@ const DashboardScreen = props => {
   const renderLabel = () => {
     if (value || isFocus) {
       return (
-        <Text style={[styles.label, isFocus && {color: 'blue'}]}>
+        <Text style={[styles.label, isFocus && { color: 'blue' }]}>
           Dropdown label
         </Text>
       );
@@ -248,17 +249,25 @@ const DashboardScreen = props => {
         size="large"
         customIndicator={
           <Image
-            source={require('../../assets/agautomate_logo.png')}
+            source={require('../../assets/agvision_logo.png')}
             style={styles.image}
             resizeMode="center"
           />
         }></Spinner>
 
       <View style={styles.appBarContainer}>
-        <View style={{marginLeft: 20}}>
-          <Text style={styles.appBarTitle}>Dashboard</Text>
+        <View style={{ flexDirection: 'row', position: 'absolute', left: 0 }}>
+          <Ionicons
+            name="arrow-back"
+            size={30}
+            style={{ margin: 10, color: '#FFF' }}
+            onPress={() => goBackScreen()}
+          />
         </View>
-        <View style={{flexDirection: 'row', position: 'absolute', right: 0}}>
+        <View style={{ marginLeft: 50 }}>
+          <Text style={styles.appBarTitle}>My Farm Reports</Text>
+        </View>
+        <View style={{ flexDirection: 'row', position: 'absolute', right: 0 }}>
           {/* <MaterialCommunityIcons
             name="barn"
             size={32}
@@ -276,10 +285,10 @@ const DashboardScreen = props => {
             size={32}
             style={{margin: 10, color: '#FFF'}}
           /> */}
-          <MaterialCommunityIcons
+          {/* <MaterialCommunityIcons
             name="logout"
             size={32}
-            style={{margin: 10, color: '#FFF'}}
+            style={{ margin: 10, color: '#FFF' }}
             onPress={() => {
               Alert.alert('Logout', 'Do you want to logout?', [
                 {
@@ -291,20 +300,20 @@ const DashboardScreen = props => {
                   text: 'OK',
                   onPress: () => {
                     AsyncStorage.setItem('isLogged', 'false');
-                    dispatch({type: 'USER_LOGGED', userLogged: false});
+                    dispatch({ type: 'USER_LOGGED', userLogged: false });
                     navigation.dispatch(StackActions.popToTop());
                   },
                 },
               ]);
             }}
-          />
+          /> */}
         </View>
       </View>
 
       <ScrollView
-        contentContainerStyle={{minHeight: '100%'}}
+        contentContainerStyle={{ minHeight: '100%' }}
         scrollToOverflowEnabled={true}>
-        <View style={{flex: 1, marginBottom: 100}}>
+        <View style={{ flex: 1, marginBottom: 100 }}>
           {/* <Text style={{color:'grey',fontSize:25,paddingTop:25,fontWeight:'bold',textAlign:'center'}}>Generate Farm Report</Text> */}
           <View style={styles.dropdownContainer}>
             {/* <View style={[styles.inputContainer]}>
@@ -344,17 +353,17 @@ const DashboardScreen = props => {
               />
             </View> */}
             <View style={styles.container}>
-              <Text style={[styles.label, isFocus && {color: 'blue'}]}>
-              Select Farm
+              <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+                Select Farm
               </Text>
               <Dropdown
-                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={farmList}
-                itemTextStyle={{color: '#333333'}}
+                itemTextStyle={{ color: '#333333' }}
                 search
                 maxHeight={300}
                 labelField="FarmName"
@@ -363,24 +372,26 @@ const DashboardScreen = props => {
                 searchPlaceholder="Search..."
                 value={valueFarmList}
                 onChange={item => {
+                  console.log('item === ', item)
                   setValuefarmList(item.id);
+                  setSelectedFarm(item.FarmName);
                   zoomToCoordinatesOnMap(item)
                 }}
               />
             </View>
-           
+
             <View style={styles.container}>
-              <Text style={[styles.label, isFocus && {color: 'blue'}]}>
-              Select Parameter
+              <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+                Select Parameter
               </Text>
               <Dropdown
-                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={items}
-                itemTextStyle={{color: '#333333'}}
+                itemTextStyle={{ color: '#333333' }}
                 search
                 maxHeight={300}
                 labelField="label"
@@ -393,7 +404,7 @@ const DashboardScreen = props => {
                 }}
               />
             </View>
-            {/* <View style={[styles.inputContainer, {marginTop: 10}]}>
+            {/*  <View style={[styles.inputContainer, { marginTop: 10 }]}>
               <DropDownPicker
                 placeholder="Select Parameter"
                 style={styles.inputDropdown}
@@ -467,7 +478,7 @@ const DashboardScreen = props => {
                   onPress={e =>
                     !farmHasCoordinates && check(e.nativeEvent.coordinate)
                   }>
-                  {markers.length > 4 && (
+                  {markers.length > 3 && (
                     <Polygon
                       coordinates={markers}
                       strokeColor="#000"
@@ -498,7 +509,7 @@ const DashboardScreen = props => {
               />
             )}
           </View>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity
               style={styles.buttonStyle}
               onPress={() => {
@@ -552,35 +563,122 @@ const DashboardScreen = props => {
                   marginTop: 10,
                   color: GOBALCOLOR.COLORS.BLACK,
                   fontSize: 16,
-                }}>{`Your expected yield ${parseFloat(
-                sendCoordinatesResponse?.data.ParameterValue,
-              ).toFixed(2)} tonne/ha`}</Text>
+                }}>{`Your ${selectedFarm}'s estimated yield ${parseFloat(
+                  sendCoordinatesResponse?.data.ParameterValue,
+                ).toFixed(2)} tonne/ha`}</Text>
             )}
             {value === '2' && (
-              <Text
-                style={{
-                  marginBottom: 10,
-                  marginTop: 10,
-                  color: GOBALCOLOR.COLORS.BLACK,
-                  fontSize: 16,
-                }}>{`Your expected pol in cane ${parseFloat(
-                sendCoordinatesResponse?.data.ParameterValue,
-              ).toFixed(2)}`}</Text>
+              <View>
+                <Text
+                  style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.BLACK,
+                    fontSize: 16,
+                  }}>{`${selectedFarm}'s estimated pol in cane ${parseFloat(
+                    sendCoordinatesResponse?.data.ParameterValue,
+                  ).toFixed(2)} %`}</Text>
+                <Text
+                  style={{
+                    color: GOBALCOLOR.COLORS.BLACK,
+                    fontSize: 16,
+                  }}>{`Comment :- `}</Text>
+                {(parseFloat(sendCoordinatesResponse?.data.ParameterValue) >= 0 && parseFloat(sendCoordinatesResponse?.data.ParameterValue) <= 5) &&
+                  < Text style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.RED,
+                    backgroundColor: GOBALCOLOR.COLORS.BLACK,
+                    padding: 10,
+                    borderRadius: 5,
+                    fontSize: 16,
+                  }}>Pol in cane is poor.</Text>}
+                {(parseFloat(sendCoordinatesResponse?.data.ParameterValue) > 5 && parseFloat(sendCoordinatesResponse?.data.ParameterValue) <= 8) &&
+                  < Text style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.YELLOW,
+                    backgroundColor: GOBALCOLOR.COLORS.BLACK,
+                    padding: 10,
+                    borderRadius: 5,
+                    fontSize: 16,
+                  }}>Pol in cane is Moderate.</Text>}
+                {(parseFloat(sendCoordinatesResponse?.data.ParameterValue) > 8 && parseFloat(sendCoordinatesResponse?.data.ParameterValue) <= 13) &&
+                  < Text style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.LIGHT_GREEN,
+                    backgroundColor: GOBALCOLOR.COLORS.BLACK,
+                    padding: 10,
+                    borderRadius: 5,
+                    fontSize: 16,
+                  }}>Pol in cane is Good.</Text>}
+                {parseFloat(sendCoordinatesResponse?.data.ParameterValue) > 13 &&
+                  < Text style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.GREEN_2,
+                    backgroundColor: GOBALCOLOR.COLORS.BLACK,
+                    padding: 10,
+                    borderRadius: 5,
+                    fontSize: 16,
+                  }}>Pol in cane is Excellent.</Text>}
+              </View>
+
             )}
             {value === '3' && (
-              <Text
-                style={{
-                  marginBottom: 10,
-                  marginTop: 10,
-                  color: GOBALCOLOR.COLORS.BLACK,
-                  fontSize: 16,
-                }}>{`Your expected water stress ${parseFloat(
-                sendCoordinatesResponse?.data.ParameterValue,
-              ).toFixed(2)}`}</Text>
+              <View>
+                <Text
+                  style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.BLACK,
+                    fontSize: 16,
+                  }}>{`Your ${selectedFarm}'s estimated water stress ${parseFloat(
+                    sendCoordinatesResponse?.data.ParameterValue,
+                  ).toFixed(2)}`}</Text>
+
+                <Text
+                  style={{
+                    color: GOBALCOLOR.COLORS.BLACK,
+                    fontSize: 16,
+                  }}>{`Comment :- `}</Text>
+
+                {(parseFloat(sendCoordinatesResponse?.data.ParameterValue) >= 0 && parseFloat(sendCoordinatesResponse?.data.ParameterValue) <= 0.3) &&
+                  < Text style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.RED,
+                    backgroundColor: GOBALCOLOR.COLORS.BLACK,
+                    padding: 10,
+                    borderRadius: 5,
+                    fontSize: 16,
+                  }}>Highly Stressed, Need Immediate Irrigation</Text>}
+                {(parseFloat(sendCoordinatesResponse?.data.ParameterValue) > 0.3 && parseFloat(sendCoordinatesResponse?.data.ParameterValue) <= 0.6) &&
+                  < Text style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.YELLOW,
+                    backgroundColor: GOBALCOLOR.COLORS.BLACK,
+                    padding: 10,
+                    borderRadius: 5,
+                    fontSize: 16,
+                  }}>Moderately Stressed, Need Attention & Irrigate if required</Text>}
+                {(parseFloat(sendCoordinatesResponse?.data.ParameterValue) > 0.6 && parseFloat(sendCoordinatesResponse?.data.ParameterValue) <= 1) &&
+                  < Text style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    color: GOBALCOLOR.COLORS.GREEN_2,
+                    backgroundColor: GOBALCOLOR.COLORS.BLACK,
+                    padding: 10,
+                    borderRadius: 5,
+                    fontSize: 16,
+                  }}>No Stress, No action required</Text>}
+              </View>
             )}
             <TouchableOpacity
-              style={{marginTop: 20}}
-              onPress={() => dispatch({type: SHOW_MODAL, isShowModal: false})}>
+              style={{ marginTop: 20 }}
+              onPress={() => dispatch({ type: SHOW_MODAL, isShowModal: false })}>
               <Text
                 style={{
                   fontSize: 16,
@@ -613,7 +711,7 @@ const DashboardScreen = props => {
             </Modal> */}
         {/* <ProgressScreen /> */}
       </ScrollView>
-    </View>
+    </View >
   );
 };
 

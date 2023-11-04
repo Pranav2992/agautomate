@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,21 +7,38 @@ import {
   BackHandler,
   TouchableOpacity,
   Image,
+
+  ActivityIndicator
 } from 'react-native';
+import MapView, {
+  Marker,
+  PROVIDER_GOOGLE,
+  Polygon,
+  Overlay,
+} from 'react-native-maps';
+import DashboardController from '../../view-controllers/dashboardcontroller';
+
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+
 import styles from './styles';
-import {TextInput, RadioButton} from 'react-native-paper';
+import { TextInput, RadioButton } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import GOBALCOLOR from '../../gobalconstant/colors';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Formik, Form, Field, ErrorMessage} from 'formik';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import validationSchema from './formValidation';
 import ProgressScreen from '../highordercomponents/progressscreen';
 import AddFarmController from '../../view-controllers/addfarmcontroller';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Checkbox} from 'react-native-paper';
-import {useSelector} from 'react-redux';
+import { Checkbox } from 'react-native-paper';
+import { useSelector } from 'react-redux';
+import RadioButtonRN from 'radio-buttons-react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
+import ArrowIcon from 'react-native-vector-icons/MaterialIcons';
+import GetLocation from 'react-native-get-location';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -35,6 +52,15 @@ const AddFarm = props => {
     setAccessToken,
   } = AddFarmController();
 
+  const {
+    checkCoordinateClockWise,
+  } = DashboardController();
+
+  const mapRef = useRef();
+
+  const [lat, setLat] = useState(16.7086167);
+  const [long, setLong] = useState(74.1564648);
+
   let coordinate1Lat = '';
   let coordinate1Long = '';
   let coordinate2Lat = '';
@@ -43,14 +69,68 @@ const AddFarm = props => {
   let coordinate3Long = '';
   let coordinate4Lat = '';
   let coordinate4Long = '';
-  let coordinate5Lat = '';
-  let coordinate5Long = '';
+  /* let coordinate5Lat = '';
+  let coordinate5Long = ''; */
   let coordinateArray = [];
   const [isLoad, setIsLoad] = useState(false);
   const [initialValues, setInitialValues] = useState({});
+  const options = [{ label: 'Add Manually' }, { label: 'Select From Map' }];
+  const [selectedGraphType, setSelectedGraphType] = useState('Add Manually');
+
+  const [markers, setMarkers] = useState([]);
+
+  const check = coordinate => {
+    /*  if (valueFarmList === null || valueFarmList === '') {
+       Toast.show({
+         variant: 'solid',
+         text: 'Please select farm.',
+         type: 'danger',
+         duration: 6000,
+       });
+     } else { */
+    console.log('coordinate = ', coordinate);
+    console.log('markers = ', markers);
+    setMarkers(markers => [...markers, coordinate]);
+    /* } */
+  };
 
   useEffect(() => {
     console.log('props == ', props.route.params);
+
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 10000,
+    })
+      .then(location => {
+        var pos = {
+          lat: location.latitude,
+          lng: location.longitude,
+        };
+        //console.log("location ==", location)
+        setLat(location.latitude);
+        setLong(location.longitude);
+        /* Geocoder.geocodePosition(pos)
+                    .then((res) => {
+                        let addressObj = res.length >= 0 ? res[0] : null;
+                        setFetching(false);
+                        const loc = {
+                            ...location,
+                            address: addressObj ? addressObj.formattedAddress : "",
+                        };
+                        props.updateDeviceAddress(loc);
+                    })
+                    .catch((err) => {
+                        setFetching(false);
+                        if (err == "gprc failed") {
+                            onLocationFetch();
+                        }
+                    }); */
+      })
+      .catch(error => {
+        /* setFetching(false); */
+        console.log('error ==', error);
+        const { code, message } = error;
+      });
 
     if (props.route.params.comesFrom === 'new') {
       setInitialValues({
@@ -64,8 +144,8 @@ const AddFarm = props => {
         longitudeCoordiante3: '',
         latitudeCoordiante4: '',
         longitudeCoordiante4: '',
-        latitudeCoordiante5: '',
-        longitudeCoordiante5: '',
+       /*  latitudeCoordiante5: '',
+        longitudeCoordiante5: '', */
       });
       setIsLoad(true);
     } else {
@@ -84,9 +164,9 @@ const AddFarm = props => {
         coordinate3Long = coordinateArray[5];
         coordinate4Lat = coordinateArray[6];
         coordinate4Long = coordinateArray[7];
-        coordinate5Lat = coordinateArray[8];
-        coordinate5Long = coordinateArray[9];
-        console.log('array == ', coordinate1Lat);
+     /*    coordinate5Lat = coordinateArray[8];
+        coordinate5Long = coordinateArray[9]; */
+        console.log('array == ', coordinateArray);
 
         setInitialValues({
           farmName: props.route.params.selectedFarm.FarmName,
@@ -99,15 +179,21 @@ const AddFarm = props => {
           longitudeCoordiante3: coordinate3Long,
           latitudeCoordiante4: coordinate4Lat,
           longitudeCoordiante4: coordinate4Long,
-          latitudeCoordiante5: coordinate5Lat,
-          longitudeCoordiante5: coordinate5Long,
+        /*   latitudeCoordiante5: coordinate5Lat,
+          longitudeCoordiante5: coordinate5Long */
         });
+        setMarkers([{ "latitude": parseFloat(coordinate1Lat), "longitude": parseFloat(coordinate1Long) },
+        { "latitude": parseFloat(coordinate2Lat), "longitude": parseFloat(coordinate2Long) },
+        { "latitude": parseFloat(coordinate3Lat), "longitude": parseFloat(coordinate3Long) },
+        { "latitude": parseFloat(coordinate4Lat), "longitude": parseFloat(coordinate4Long) },
+        /* { "latitude": parseFloat(coordinate5Lat), "longitude": parseFloat(coordinate5Long) } */]);
         setIsLoad(true);
       } else {
         setInitialValues({
           farmName: props.route.params.selectedFarm.FarmName,
           farmerName: props.route.params.selectedFarm.FarmerName,
         });
+        setMarkers([]);
         setIsLoad(true);
       }
     }
@@ -116,7 +202,7 @@ const AddFarm = props => {
       setAccessToken(accessToken);
     });
   }, []);
-  const {isShowModal, isProgressShow} = useSelector(state => state.appReducers);
+  const { isShowModal, isProgressShow } = useSelector(state => state.appReducers);
 
   const [checked, setChecked] = React.useState(false);
 
@@ -134,21 +220,21 @@ const AddFarm = props => {
         size="large"
         customIndicator={
           <Image
-            source={require('../../assets/agautomate_logo.png')}
+            source={require('../../assets/agvision_logo.png')}
             style={styles.image}
             resizeMode="center"
           />
         }></Spinner>
       <View style={styles.appBarContainer}>
-        <View style={{flexDirection: 'row', position: 'absolute', left: 5}}>
+        <View style={{ flexDirection: 'row', position: 'absolute', left: 5 }}>
           <Ionicons
             name="arrow-back"
             size={35}
-            style={{margin: 10, color: '#FFF'}}
+            style={{ margin: 10, color: '#FFF' }}
             onPress={() => goBackScreen()}
           />
         </View>
-        <View style={{marginLeft: 70}}>
+        <View style={{ marginLeft: 70 }}>
           <Text style={styles.appBarTitle}>
             {props.route.params.comesFrom === 'new'
               ? `Add Farm Details`
@@ -161,7 +247,7 @@ const AddFarm = props => {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            /* onSubmit={} */
+          /* onSubmit={} */
           >
             {({
               handleChange,
@@ -179,7 +265,7 @@ const AddFarm = props => {
                   margin: 10,
                 }}>
                 <View>
-                  <View style={[styles.inputContainer, {marginTop: 10}]}>
+                  <View style={[styles.inputContainer, { marginTop: 10 }]}>
                     <TextInput
                       mode="outlined"
                       label="Farm Name"
@@ -197,7 +283,7 @@ const AddFarm = props => {
                       activeOutlineColor={
                         errors.farmName && touched.farmName ? 'red' : 'black'
                       }
-                      outlineStyle={{borderWidth: 0.5}}
+                      outlineStyle={{ borderWidth: 0.5 }}
                     />
                   </View>
                   {errors.farmName && touched.farmName ? (
@@ -205,7 +291,7 @@ const AddFarm = props => {
                       {errors.farmName + ' *'}
                     </Text>
                   ) : null}
-                  <View style={[styles.inputContainer, {marginTop: 10}]}>
+                  <View style={[styles.inputContainer, { marginTop: 10 }]}>
                     <TextInput
                       mode="outlined"
                       label="Farmer Name"
@@ -220,7 +306,7 @@ const AddFarm = props => {
                       onBlur={handleBlur('farmerName')}
                       activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                       underlineColor={GOBALCOLOR.COLORS.BROWN}
-                      outlineStyle={{borderWidth: 0.5}}
+                      outlineStyle={{ borderWidth: 0.5 }}
                       activeOutlineColor={
                         errors.farmerName && touched.farmerName
                           ? 'red'
@@ -258,6 +344,39 @@ const AddFarm = props => {
                   </View>
 
                   {checked && (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginTop: 10,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <RadioButtonRN
+                        data={options}
+                        boxStyle={styles.boxStyle}
+                        style={styles.rbBtn}
+                        initial={1}
+                        animationTypes={['shake']}
+                        box={false}
+                        textColor={GOBALCOLOR.COLORS.BLACK}
+                        activeColor={GOBALCOLOR.COLORS.ORANAGE}
+                        deactiveColor={GOBALCOLOR.COLORS.ORANAGE}
+                        textStyle={{
+                          fontSize: width / 25,
+                          marginLeft: 10,
+                        }}
+                        icon={
+                          <ArrowIcon
+                            name="check-circle"
+                            size={26}
+                            color={GOBALCOLOR.COLORS.ORANAGE}
+                          />
+                        }
+                        selectedBtn={e => setSelectedGraphType(e.label)}
+                      />
+                    </View>)}
+
+                  {checked && selectedGraphType === 'Add Manually' && (
                     <View>
                       <Text
                         style={{
@@ -282,7 +401,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       <TextInput
                         mode="outlined"
@@ -298,7 +417,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       {/* <View style={{flexDirection: 'row', marginTop: 5}}>
                         <View style={{flex: 1}}>
@@ -395,7 +514,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       <TextInput
                         mode="outlined"
@@ -411,7 +530,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       {/* <View style={{flexDirection: 'row', marginTop: 5}}>
                         <View style={{flex: 1}}>
@@ -508,7 +627,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       <TextInput
                         mode="outlined"
@@ -524,7 +643,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       {/* <View style={{flexDirection: 'row', marginTop: 5}}>
                         <View style={{flex: 1}}>
@@ -622,7 +741,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       <TextInput
                         mode="outlined"
@@ -638,7 +757,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       {/* <View style={{flexDirection: 'row', marginTop: 5}}>
                         <View style={{flex: 1}}>
@@ -712,7 +831,7 @@ const AddFarm = props => {
                           ) : null}
                         </View>
                       </View> */}
-                      <Text
+                      {/* <Text
                         style={{
                           fontSize: 15,
                           marginTop: 15,
@@ -735,7 +854,7 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
+                        outlineStyle={{ borderWidth: 0.5 }}
                       />
                       <TextInput
                         mode="outlined"
@@ -751,8 +870,8 @@ const AddFarm = props => {
                         activeUnderlineColor={GOBALCOLOR.COLORS.BROWN}
                         underlineColor={GOBALCOLOR.COLORS.BROWN}
                         activeOutlineColor="black"
-                        outlineStyle={{borderWidth: 0.5}}
-                      />
+                        outlineStyle={{ borderWidth: 0.5 }}
+                      /> */}
                       {/* <View style={{flexDirection: 'row', marginTop: 5}}>
                         <View style={{flex: 1}}>
                           <View
@@ -827,6 +946,59 @@ const AddFarm = props => {
                       </View> */}
                     </View>
                   )}
+                  {checked && selectedGraphType === 'Select From Map' &&
+                    (<View
+                      style={{
+                        marginTop: 10,
+                        overflow: 'hidden',
+                        height: deviceHeight / 1.5,
+                      }}>
+                      <View
+                        style={{
+                          position: 'absolute',
+                          bottom: 0,
+                          right: 0,
+                          left: 0,
+                          top: 0,
+                        }}>
+
+                        <MapView
+                          mapType="hybrid"
+                          style={{
+                            height: deviceHeight * 0.83,
+                            width: deviceWidth,
+                          }}
+                          ref={mapRef}
+                          initialRegion={{
+                            latitude: lat,
+                            longitude: long,
+                            latitudeDelta: 0.05,
+                            longitudeDelta: 0.05,
+                          }}
+                          onPress={e =>
+                            check(e.nativeEvent.coordinate)
+                          }>
+                          {markers.length > 3 && (
+                            <Polygon
+                              coordinates={markers}
+                              strokeColor="#000"
+                              strokeWidth={2}
+                              fillColor="#00000022"></Polygon>
+                          )}
+
+                          {markers.length > 0 &&
+                            markers.map((marker, i) => {
+                              //console.log('marker ==', marker)
+                              return <Marker coordinate={marker} key={i} draggable />;
+                            })}
+                        </MapView>
+                        <TouchableOpacity
+                          style={styles.mapBtn}
+                          onPress={() => setMarkers([])}>
+                          <Text style={styles.maBtnText}>Clear Area Section</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>)}
                 </View>
                 <TouchableOpacity
                   style={styles.buttonStyle}
@@ -834,24 +1006,24 @@ const AddFarm = props => {
                   onPress={() =>
                     props.route.params.comesFrom == 'new'
                       ? addFarmerFarm({
-                          FarmName: values.farmName,
-                          FarmerName: values.farmerName,
-                          authToken: accessToken,
-                          Coordinate:
-                            checked === true
-                              ? `${values.latitudeCoordiante1},${values.longitudeCoordiante1},${values.latitudeCoordiante2},${values.longitudeCoordiante2},${values.latitudeCoordiante3},${values.longitudeCoordiante3},${values.latitudeCoordiante4},${values.longitudeCoordiante4},${values.latitudeCoordiante5},${values.longitudeCoordiante5}`
-                              : '',
-                        })
+                        FarmName: values.farmName,
+                        FarmerName: values.farmerName,
+                        authToken: accessToken,
+                        Coordinate:
+                          checked === true
+                            ? selectedGraphType === 'Add Manually' ? `${values.latitudeCoordiante1},${values.longitudeCoordiante1},${values.latitudeCoordiante2},${values.longitudeCoordiante2},${values.latitudeCoordiante3},${values.longitudeCoordiante3},${values.latitudeCoordiante4},${values.longitudeCoordiante4}`
+                              : `${markers[0].latitude},${markers[0].longitude},${markers[1].latitude},${markers[1].longitude},${markers[2].latitude},${markers[2].longitude},${markers[3].latitude},${markers[3].longitude}` : '',
+                      })
                       : updateFarmerFarm({
-                          id: parseInt(props.route.params.selectedFarm.id),
-                          FarmName: values.farmName,
-                          FarmerName: values.farmerName,
-                          authToken: accessToken,
-                          Coordinate:
-                            checked === true
-                              ? `${values.latitudeCoordiante1},${values.longitudeCoordiante1},${values.latitudeCoordiante2},${values.longitudeCoordiante2},${values.latitudeCoordiante3},${values.longitudeCoordiante3},${values.latitudeCoordiante4},${values.longitudeCoordiante4},${values.latitudeCoordiante5},${values.longitudeCoordiante5}`
-                              : '',
-                        })
+                        id: parseInt(props.route.params.selectedFarm.id),
+                        FarmName: values.farmName,
+                        FarmerName: values.farmerName,
+                        authToken: accessToken,
+                        Coordinate:
+                          checked === true
+                            ? selectedGraphType === 'Add Manually' ? `${values.latitudeCoordiante1},${values.longitudeCoordiante1},${values.latitudeCoordiante2},${values.longitudeCoordiante2},${values.latitudeCoordiante3},${values.longitudeCoordiante3},${values.latitudeCoordiante4},${values.longitudeCoordiante4}`
+                              : `${markers[0].latitude},${markers[0].longitude},${markers[1].latitude},${markers[1].longitude},${markers[2].latitude},${markers[2].longitude},${markers[3].latitude},${markers[3].longitude}` : '',
+                      })
                   }>
                   <Text style={styles.buttonText}>
                     {props.route.params.comesFrom === 'new'

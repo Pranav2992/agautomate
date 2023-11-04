@@ -1,4 +1,4 @@
-import React, {StyleSheet, Dimensions} from 'react-native';
+import React, { StyleSheet, Dimensions } from 'react-native';
 import GOBALCOLORS from '../../gobalconstant/colors';
 
 const width = Dimensions.get('window').width;
@@ -10,7 +10,7 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    alignContent:'center'
+    alignContent: 'center'
   },
   title: {
     fontSize: 30,
@@ -49,7 +49,7 @@ export default StyleSheet.create({
     width: width / 1.1,
     borderRadius: 10,
     shadowColor: GOBALCOLORS.COLORS.GREEN_2,
-    shadowOffset: {width: 1, height: 1},
+    shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.2,
     elevation: 7,
   },
@@ -90,11 +90,11 @@ export default StyleSheet.create({
     borderRadius: 100,
     alignSelf: 'center',
     marginBottom: 20,
-   
+
   },
   logoImg: {
-    height: 100,
-    width: 200,
+    height: width / 2,
+    width: width / 2,
   },
   signUpLabel: {
     fontSize: 24,

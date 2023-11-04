@@ -1,4 +1,4 @@
-import React, {StyleSheet, Dimensions} from 'react-native';
+import React, { StyleSheet, Dimensions } from 'react-native';
 import GOBALCOLORS from '../../gobalconstant/colors';
 
 const width = Dimensions.get('window').width;
@@ -44,7 +44,7 @@ export default StyleSheet.create({
   //   //overflow: 'hidden',
   //   backgroundColor: GOBALCOLORS.COLORS.BROWN_LIGHT,
   // },
- 
+
   buttonStyle: {
     backgroundColor: GOBALCOLORS.COLORS.GREEN_2,
     justifyContent: 'center',
@@ -54,7 +54,7 @@ export default StyleSheet.create({
     width: width / 1.1,
     borderRadius: 10,
     shadowColor: GOBALCOLORS.COLORS.GREEN_2,
-    shadowOffset: {width: 1, height: 1},
+    shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.2,
     elevation: 7,
   },
@@ -76,5 +76,36 @@ export default StyleSheet.create({
   image: {
     width: 80,
     height: 80,
+  },
+  boxStyle: {
+    borderWidth: 0,
+    width: width / 3,
+    height: 55,
+    flexDirection: 'row',
+  },
+  rbBtn: {
+    flexDirection: 'row',
+  },
+  spinnerTextStyle: {
+    width: 250,
+    textAlign: 'center',
+  },
+  mapBtn: {
+    position: 'absolute', //use absolute position to show button on top of the map
+    top: '91%', //for center align
+    right: '3%',
+    alignSelf: 'flex-end', //for align to right
+    backgroundColor: GOBALCOLORS.COLORS.BROWN,
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: GOBALCOLORS.COLORS.BLACK,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.2,
+    elevation: 7,
+  },
+  maBtnText: {
+    color: GOBALCOLORS.COLORS.WHITE,
+    fontSize: 11,
+    fontWeight: 'bold',
   },
 });

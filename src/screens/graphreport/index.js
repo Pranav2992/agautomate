@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -11,26 +11,26 @@ import {
 } from 'react-native';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {YAxis, XAxis, BarChart} from 'react-native-svg-charts';
+import { YAxis, XAxis, BarChart } from 'react-native-svg-charts';
 import DropDownPicker from 'react-native-dropdown-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
 import GOBALCOLOR from '../../gobalconstant/colors';
 import ArrowIcon from 'react-native-vector-icons/MaterialIcons';
 import GraphReportController from '../../view-controllers/graphreportcontroller';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useSelector, connect, useDispatch} from 'react-redux';
+import { useSelector, connect, useDispatch } from 'react-redux';
 import ProgressScreen from '../highordercomponents/progressscreen';
-import {farmList as getFarmList} from '../../store/actions/apiCallActions';
+import { farmList as getFarmList } from '../../store/actions/apiCallActions';
 const width = Dimensions.get('window').width;
-import {LineChart} from 'react-native-chart-kit';
-import {useEffect} from 'react';
+import { LineChart } from 'react-native-chart-kit';
+import { useEffect } from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Dropdown} from 'react-native-element-dropdown';
-import {useIsFocused} from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { useIsFocused } from '@react-navigation/native';
 
 const GraphReportScreen = props => {
-  const {isShowModal, isProgressShow} = useSelector(state => state.appReducers);
+  const { isShowModal, isProgressShow } = useSelector(state => state.appReducers);
   const [isFocus, setIsFocus] = useState(false);
   const [years, setYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState();
@@ -39,30 +39,30 @@ const GraphReportScreen = props => {
     {
       xAxisLabel: 'W1',
       yAxisValue: parseFloat(50),
-      svg: {fill: '#004B8D'},
+      svg: { fill: '#004B8D' },
     },
     {
       xAxisLabel: 'W2',
       yAxisValue: parseFloat(10),
-      svg: {fill: '#004B8D'},
+      svg: { fill: '#004B8D' },
     },
     {
       xAxisLabel: 'W3',
       yAxisValue: parseFloat(40),
-      svg: {fill: '#004B8D'},
+      svg: { fill: '#004B8D' },
     },
     {
       xAxisLabel: 'W4',
       yAxisValue: parseFloat(90),
-      svg: {fill: '#004B8D'},
+      svg: { fill: '#004B8D' },
     },
   ];
 
   const horizontalData = ['W1', 'W2', 'W3', 'W4'];
   const fill = 'rgb(134, 65, 244)';
-  const contentInset = {top: 20, bottom: 20};
+  const contentInset = { top: 20, bottom: 20 };
   const dispatch = useDispatch();
-  const {getGraphDataResponse, farmList} = useSelector(
+  const { getGraphDataResponse, farmList } = useSelector(
     state => state.apiCallReducers,
   );
 
@@ -135,18 +135,18 @@ const GraphReportScreen = props => {
           />
         }></Spinner>
       <View style={styles.appBarContainer}>
-        {/* <View style={{flexDirection: 'row', position: 'absolute', left: 5}}>
+        <View style={{ flexDirection: 'row', position: 'absolute', left: 0 }}>
           <Ionicons
             name="arrow-back"
-            size={35}
-            style={{margin: 10, color: '#FFF'}}
+            size={30}
+            style={{ margin: 10, color: '#FFF' }}
             onPress={() => goBackScreen()}
           />
-        </View> */}
-        <View style={{marginLeft: 20}}>
-          <Text style={styles.appBarTitle}>Graphical Report</Text>
         </View>
-        <View style={{flexDirection: 'row', position: 'absolute', right: 0}}>
+        <View style={{ marginLeft: 50 }}>
+          <Text style={styles.appBarTitle}>Historical Report</Text>
+        </View>
+        {/* <View style={{flexDirection: 'row', position: 'absolute', right: 0}}>
           <MaterialCommunityIcons
             name="logout"
             size={32}
@@ -169,24 +169,24 @@ const GraphReportScreen = props => {
               ]);
             }}
           />
-        </View>
+        </View> */}
       </View>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={{ flexGrow: 1 }}
         scrollToOverflowEnabled={true}>
         <View style={styles.dropdownContainer}>
           <View style={styles.container}>
-            <Text style={[styles.label, isFocus && {color: 'blue'}]}>
+            <Text style={[styles.label, isFocus && { color: 'blue' }]}>
               Select Parameter
             </Text>
             <Dropdown
-              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={items}
-              itemTextStyle={{color: '#333333'}}
+              itemTextStyle={{ color: '#333333' }}
               search
               maxHeight={300}
               labelField="label"
@@ -213,17 +213,17 @@ const GraphReportScreen = props => {
             />
           </View> */}
           <View style={styles.container}>
-            <Text style={[styles.label, isFocus && {color: 'blue'}]}>
+            <Text style={[styles.label, isFocus && { color: 'blue' }]}>
               Select Farm
             </Text>
             <Dropdown
-              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={farmList}
-              itemTextStyle={{color: '#333333'}}
+              itemTextStyle={{ color: '#333333' }}
               search
               maxHeight={300}
               labelField="FarmName"
@@ -256,17 +256,17 @@ const GraphReportScreen = props => {
           </View> */}
 
           <View style={styles.container}>
-            <Text style={[styles.label, isFocus && {color: 'blue'}]}>
+            <Text style={[styles.label, isFocus && { color: 'blue' }]}>
               Select Month
             </Text>
             <Dropdown
-              style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={itemMonths}
-              itemTextStyle={{color: '#333333'}}
+              itemTextStyle={{ color: '#333333' }}
               search
               maxHeight={300}
               labelField="label"
@@ -312,21 +312,13 @@ const GraphReportScreen = props => {
             selectedBtn={e => setSelectedGraphType(e.label)}
           />
           <TouchableOpacity
-            style={{
-              backgroundColor: GOBALCOLOR.COLORS.ORANAGE,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: width / 1.5,
-              height: 50,
-              borderRadius: 10,
-            }}
+            style={styles.buttonStyle}
             onPress={() =>
               getGraphDataFromServer({
                 authToken: accessToken,
               })
             }>
-            <Text style={[{fontSize: width / 25}]}>Draw Graph</Text>
+            <Text style={[styles.buttonText]}>Historical Report</Text>
           </TouchableOpacity>
         </View>
         {/*  <View> */}
@@ -375,8 +367,8 @@ const GraphReportScreen = props => {
                 />
               </ScrollView>
             ) : (
-              <View style={{flex: 1, backgroundColor: '#fff'}}>
-                <View style={{flexDirection: 'row'}}>
+              <View style={{ flex: 1, backgroundColor: '#fff' }}>
+                <View style={{ flexDirection: 'row' }}>
                   {/*  <YAxis
                             data={[50, 10, 40, 95]}
                             contentInset={contentInset}
@@ -389,23 +381,23 @@ const GraphReportScreen = props => {
                             formatLabel={(value) => `${value}ºC`}
                         /> */}
                   <View
-                    style={{width: 1, backgroundColor: '#000', marginLeft: 5}}
+                    style={{ width: 1, backgroundColor: '#000', marginLeft: 5 }}
                   />
                   <BarChart
-                    style={{height: 200, marginTop: 10}}
+                    style={{ height: 200, marginTop: 10 }}
                     spacingInner={0.5}
                     bandwidth={2}
                     data={data1}
                     showValuesOnTopOfBars={true}
-                    yAccessor={({item}) => item.yAxisValue}
-                    xAccessor={({item}) => item.xAxisLabel}
+                    yAccessor={({ item }) => item.yAxisValue}
+                    xAccessor={({ item }) => item.xAxisLabel}
                     yMin={0}
-                    svg={{fill}}
-                    contentInset={{contentInset}}></BarChart>
+                    svg={{ fill }}
+                    contentInset={{ contentInset }}></BarChart>
                 </View>
-                <View style={{height: 1, backgroundColor: '#000'}} />
+                <View style={{ height: 1, backgroundColor: '#000' }} />
                 <XAxis
-                  style={{marginTop: 5}}
+                  style={{ marginTop: 5 }}
                   svg={{
                     fill: '#000',
                     fontSize: 12,
@@ -413,9 +405,9 @@ const GraphReportScreen = props => {
                   }}
                   data={horizontalData}
                   spacingInner={0}
-                  contentInset={{left: 55, right: 45}}
+                  contentInset={{ left: 55, right: 45 }}
                   formatLabel={(value, index) => horizontalData[index]}
-                  labelStyle={{color: '#000'}}
+                  labelStyle={{ color: '#000' }}
                 />
               </View>
             )}

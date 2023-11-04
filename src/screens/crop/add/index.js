@@ -1,5 +1,5 @@
 // let result = await NETWORK(ENDPOINT.LOGIN, 'POST', data);
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,21 +10,21 @@ import {
   Platform,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {TextInput, RadioButton, Button} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
+import { TextInput, RadioButton, Button } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import AddFarmController from '../../../view-controllers/addfarmcontroller';
 import GOBALCOLOR from '../../../gobalconstant/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {farmList as getFarmList} from '../../../store/actions/apiCallActions';
-import {Dropdown} from 'react-native-element-dropdown';
+import { farmList as getFarmList } from '../../../store/actions/apiCallActions';
+import { Dropdown } from 'react-native-element-dropdown';
 import DashboardController from '../../../view-controllers/dashboardcontroller';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment/moment';
 import validationSchema from './formValidation';
 import CropController from '../../../view-controllers/cropController';
-import {Formik, Form, Field, ErrorMessage} from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styles from './styles';
 
 const width = Dimensions.get('window').width;
@@ -42,7 +42,7 @@ const AddCrop = props => {
     setValuefarmList,
   } = DashboardController();
   // const {setAccessToken} = AddFarmController();
-  const {addCropDetail, Crop_List,goBackScreen} = CropController();
+  const { addCropDetail, Crop_List, goBackScreen, getVarietyOfCrop } = CropController();
   const [initialValues, setInitialValues] = useState({});
   const [accessToken, setAccessToken] = useState('');
 
@@ -53,12 +53,13 @@ const AddCrop = props => {
   });
   const [isLoad, setIsLoad] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
-  const {farmList} = useSelector(state => state.apiCallReducers);
-  const {cropList} = useSelector(state => state.apiCallReducers);
+  const { farmList } = useSelector(state => state.apiCallReducers);
+  const { cropList, cropVarietyList } = useSelector(state => state.apiCallReducers);
 
   const [date, setDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedCrop, setSelectedCrop] = useState('');
+  const [selectedCropVariety, setSelectedCropVariety] = useState('');
 
   useEffect(() => {
     AsyncStorage.getItem('accessToken').then(accessToken => {
@@ -71,6 +72,7 @@ const AddCrop = props => {
         Crop_List({
           authToken: accessToken,
         }),
+
       );
     });
     // AsyncStorage.getItem('accessToken').then(accessToken => {
@@ -83,7 +85,7 @@ const AddCrop = props => {
     setIsLoad(true);
   }, []);
 
-  const {isShowModal, isProgressShow} = useSelector(state => state.appReducers);
+  const { isShowModal, isProgressShow } = useSelector(state => state.appReducers);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
@@ -213,15 +215,15 @@ const AddCrop = props => {
           />
         }></Spinner>
       <View style={styles.appBarContainer}>
-        <View style={{flexDirection: 'row', position: 'absolute', left: 5}}>
+        <View style={{ flexDirection: 'row', position: 'absolute', left: 5 }}>
           <Ionicons
             name="arrow-back"
             size={35}
-            style={{margin: 10, color: '#FFF'}}
+            style={{ margin: 10, color: '#FFF' }}
             onPress={() => goBackScreen()}
           />
         </View>
-        <View style={{marginLeft: 70}}>
+        <View style={{ marginLeft: 70 }}>
           <Text style={styles.appBarTitle}>
             {/* {props.route.params.comesFrom === 'new'
               ? `Add Crop Details`
@@ -235,7 +237,7 @@ const AddCrop = props => {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            /* onSubmit={} */
+          /* onSubmit={} */
           >
             {({
               handleChange,
@@ -254,20 +256,20 @@ const AddCrop = props => {
                 }}>
                 <View>
                   <View style={styles.container}>
-                    <Text style={[styles.label, isFocus && {color: 'blue'}]}>
+                    <Text style={[styles.label, isFocus && { color: 'blue' }]}>
                       Select Farm
                     </Text>
                     <Dropdown
                       style={[
                         styles.dropdown,
-                        isFocus && {borderColor: 'blue'},
+                        isFocus && { borderColor: 'blue' },
                       ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       inputSearchStyle={styles.inputSearchStyle}
                       iconStyle={styles.iconStyle}
                       data={farmList}
-                      itemTextStyle={{color: '#333333'}}
+                      itemTextStyle={{ color: '#333333' }}
                       search
                       maxHeight={300}
                       labelField="FarmName"
@@ -283,20 +285,20 @@ const AddCrop = props => {
                   </View>
 
                   <View style={styles.container}>
-                    <Text style={[styles.label, isFocus && {color: 'blue'}]}>
+                    <Text style={[styles.label, isFocus && { color: 'blue' }]}>
                       Select Crop
                     </Text>
                     <Dropdown
                       style={[
                         styles.dropdown,
-                        isFocus && {borderColor: 'blue'},
+                        isFocus && { borderColor: 'blue' },
                       ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       inputSearchStyle={styles.inputSearchStyle}
                       iconStyle={styles.iconStyle}
                       data={cropList}
-                      itemTextStyle={{color: '#333333'}}
+                      itemTextStyle={{ color: '#333333' }}
                       search
                       maxHeight={300}
                       labelField="CropName"
@@ -306,6 +308,34 @@ const AddCrop = props => {
                       value={selectedCrop}
                       onChange={item => {
                         setSelectedCrop(item.id);
+                        getVarietyOfCrop({ id: item.id, authToken: accessToken })
+                      }}
+                    />
+                  </View>
+                  <View style={styles.container}>
+                    <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+                      Select Crop Variety
+                    </Text>
+                    <Dropdown
+                      style={[
+                        styles.dropdown,
+                        isFocus && { borderColor: 'blue' },
+                      ]}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      iconStyle={styles.iconStyle}
+                      data={cropVarietyList}
+                      itemTextStyle={{ color: '#333333' }}
+                      search
+                      maxHeight={300}
+                      labelField="VarietyName"
+                      valueField="id"
+                      placeholder="Select Crop Variety"
+                      searchPlaceholder="Search..."
+                      value={selectedCropVariety}
+                      onChange={item => {
+                        setSelectedCropVariety(item.id);
                       }}
                     />
                   </View>
@@ -347,6 +377,7 @@ const AddCrop = props => {
                       addCropDetail({
                         FarmId: valueFarmList,
                         CropId: selectedCrop,
+                        VarietyId: selectedCropVariety,
                         SowingDate: selectedDate,
                         authToken: accessToken,
                       })
@@ -374,7 +405,7 @@ const AddCrop = props => {
         )}
         {/* <ProgressScreen /> */}
       </KeyboardAwareScrollView>
-    </View>
+    </View >
   );
 };
 
